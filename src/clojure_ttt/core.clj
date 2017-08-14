@@ -25,3 +25,13 @@
 
 (defn rows [board]
   (mapv vec (partition 3 (into (sorted-map) board))))
+
+(defn columns [board]
+  (apply mapv vector (rows board)))
+
+  ; columns
+  ; diagonals
+  ; winner
+  ; has winner?
+  ; game over?
+  ; tied?
