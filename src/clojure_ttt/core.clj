@@ -14,11 +14,11 @@
   "unmark the board at space (necessary for minimax algorithm)"
   (assoc-in board [space] {:marked false :mark nil}))
 
-(defn valid-spaces [board]
+(defn empty-spaces [board]
   (keep (fn [[space-index space-info]] (if-not (:marked space-info) space-index)) board))
 
-(defn valid-spaces-alt [board]
+(defn empty-spaces-alt [board]
   (for [[space-index space-info] board :when (not (:marked space-info))] space-index))
 
  (defn full? [board]
-   (= 0 (count (valid-spaces board))))
+   (= 0 (count (empty-spaces board))))

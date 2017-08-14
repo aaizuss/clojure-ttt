@@ -43,11 +43,11 @@
                 properties (get board 1)]
         properties)))))
 
-(deftest valid-spaces-test
-  (testing "all spaces are valid on a new board"
-    (is (= (set (range 9)) (set (valid-spaces blank-board))))
+(deftest empty-spaces-test
+  (testing "all spaces are empty on a new board"
+    (is (= (set (range 9)) (set (empty-spaces blank-board))))
   (testing "marked spaces are not included in list"
-    (is (= (set '(1 2 3 5 6 7)) (set (valid-spaces marked-board)))))))
+    (is (= (set '(1 2 3 5 6 7)) (set (empty-spaces marked-board)))))))
 
 (deftest full-test
   (testing "returns false for empty board"
