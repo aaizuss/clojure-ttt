@@ -29,9 +29,5 @@
 (defn columns [board]
   (apply mapv vector (rows board)))
 
-  ; columns
-  ; diagonals
-  ; winner
-  ; has winner?
-  ; game over?
-  ; tied?
+;(defn diagonals [board] ??? )
+; diag: 0 4 8, 2 4 7
