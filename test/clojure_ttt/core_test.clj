@@ -84,3 +84,14 @@
         [5 {:marked false, :mark nil}]
         [8 {:marked false, :mark nil}]]]
       (columns blank-board)))))
+
+(deftest diagonals-test
+  (testing "returns board partitioned as diagonals"
+    (is (=
+      [[[0 {:marked false, :mark nil}]
+        [4 {:marked false, :mark nil}]
+        [8 {:marked false, :mark nil}]]
+       [[2 {:marked false, :mark nil}]
+        [4 {:marked false, :mark nil}]
+        [6 {:marked false, :mark nil}]]]
+      (diagonals blank-board)))))

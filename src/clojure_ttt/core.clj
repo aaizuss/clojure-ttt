@@ -2,7 +2,7 @@
   (:gen-class))
 
 (defn new-board []
-  (into {} (for [space (range 9) value [{:marked false, :mark nil}]] [space value])))
+  (into (sorted-map) (into {} (for [space (range 9) value [{:marked false, :mark nil}]] [space value]))))
 
 (defn marked? [board space]
   (get-in board [space :marked]))
@@ -29,5 +29,11 @@
 (defn columns [board]
   (apply mapv vector (rows board)))
 
-;(defn diagonals [board] ??? )
-; diag: 0 4 8, 2 4 7
+(defn diagonal-top-left [board]
+  (vec (take 3 (take-nth 4 board))))
+
+(defn diagonal-top-right [board]
+  (vec (select-keys board [2 4 6])))
+
+(defn diagonals [board]
+  [(diagonal-top-left board) (diagonal-top-right board)])
