@@ -2,7 +2,7 @@
   (:gen-class))
 
 (defn new-board []
-  (into {} (for [space (range 9) v [{:marked false, :mark nil}]] [space v])))
+  (into {} (for [space (range 9) value [{:marked false, :mark nil}]] [space value])))
 
 (defn marked? [board space]
   (get-in board [space :marked]))
@@ -19,3 +19,6 @@
 
 (defn valid-spaces-alt [board]
   (for [[space-index space-info] board :when (not (:marked space-info))] space-index))
+
+ (defn full? [board]
+   (= 0 (count (valid-spaces board))))

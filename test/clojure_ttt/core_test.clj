@@ -27,6 +27,9 @@
    7 {:marked false, :mark nil},
    8 {:marked true, :mark "x"}})
 
+(def full-board
+  (into {} (for [space (range 9) value [{:marked true, :mark "x"}]] [space value])))
+
 (deftest marked-test
   (testing "returns false when space is empty"
     (is (= false (marked? blank-board 4))))
@@ -45,3 +48,11 @@
     (is (= (set (range 9)) (set (valid-spaces blank-board))))
   (testing "marked spaces are not included in list"
     (is (= (set '(1 2 3 5 6 7)) (set (valid-spaces marked-board)))))))
+
+(deftest full-test
+  (testing "returns false for empty board"
+    (is (= false (full? blank-board))))
+  (testing "returns true for a full board"
+    (is (= true (full? full-board))))
+  (testing "returns false for partially marked board"
+    (is (= false (full? marked-board)))))
