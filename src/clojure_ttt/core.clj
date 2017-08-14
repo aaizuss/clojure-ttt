@@ -20,5 +20,8 @@
 (defn empty-spaces-alt [board]
   (for [[space-index space-info] board :when (not (:marked space-info))] space-index))
 
- (defn full? [board]
-   (= 0 (count (empty-spaces board))))
+(defn full? [board]
+  (= 0 (count (empty-spaces board))))
+
+(defn rows [board]
+  (mapv vec (partition 3 (into (sorted-map) board))))

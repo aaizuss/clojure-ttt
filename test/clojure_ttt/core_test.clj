@@ -56,3 +56,16 @@
     (is (= true (full? full-board))))
   (testing "returns false for partially marked board"
     (is (= false (full? marked-board)))))
+
+(deftest rows-test
+  (testing "returns board partitioned as rows"
+    (is (= [[[0 {:marked false, :mark nil}]
+            [1 {:marked false, :mark nil}]
+            [2 {:marked false, :mark nil}]]
+           [[3 {:marked false, :mark nil}]
+            [4 {:marked false, :mark nil}]
+            [5 {:marked false, :mark nil}]]
+           [[6 {:marked false, :mark nil}]
+            [7 {:marked false, :mark nil}]
+            [8 {:marked false, :mark nil}]]]
+          (rows blank-board)))))
