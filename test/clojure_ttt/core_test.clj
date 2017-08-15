@@ -20,63 +20,75 @@
 ; note: important that these are sorted maps
 (def marked-board
   (into (sorted-map)
-  {0 {:marked true, :mark "x"},
-   1 {:marked false, :mark nil},
-   2 {:marked false, :mark nil},
-   3 {:marked false, :mark nil},
-   4 {:marked true, :mark "o"},
-   5 {:marked false, :mark nil},
-   6 {:marked false, :mark nil},
-   7 {:marked false, :mark nil},
-   8 {:marked true, :mark "x"}}))
+    {0 {:marked true, :mark "x"},
+     1 {:marked false, :mark nil},
+     2 {:marked false, :mark nil},
+     3 {:marked false, :mark nil},
+     4 {:marked true, :mark "o"},
+     5 {:marked false, :mark nil},
+     6 {:marked false, :mark nil},
+     7 {:marked false, :mark nil},
+     8 {:marked true, :mark "x"}}))
 
 (def row-0-winner
  (into (sorted-map)
- {0 {:marked true, :mark "x"},
-  1 {:marked true, :mark "x"},
-  2 {:marked true, :mark "x"},
-  3 {:marked false, :mark nil},
-  4 {:marked true, :mark "o"},
-  5 {:marked false, :mark nil},
-  6 {:marked false, :mark nil},
-  7 {:marked false, :mark nil},
-  8 {:marked true, :mark "o"}}))
+   {0 {:marked true, :mark "x"},
+    1 {:marked true, :mark "x"},
+    2 {:marked true, :mark "x"},
+    3 {:marked false, :mark nil},
+    4 {:marked true, :mark "o"},
+    5 {:marked false, :mark nil},
+    6 {:marked false, :mark nil},
+    7 {:marked false, :mark nil},
+    8 {:marked true, :mark "o"}}))
 
 (def row-2-winner
  (into (sorted-map)
- {0 {:marked false, :mark nil},
-  1 {:marked false, :mark nil},
-  2 {:marked true, :mark "x"},
-  3 {:marked false, :mark nil},
-  4 {:marked true, :mark nil},
-  5 {:marked true, :mark "x"},
-  6 {:marked true, :mark "o"},
-  7 {:marked true, :mark "o"},
-  8 {:marked true, :mark "o"}}))
+   {0 {:marked false, :mark nil},
+    1 {:marked false, :mark nil},
+    2 {:marked true, :mark "x"},
+    3 {:marked false, :mark nil},
+    4 {:marked true, :mark nil},
+    5 {:marked true, :mark "x"},
+    6 {:marked true, :mark "o"},
+    7 {:marked true, :mark "o"},
+    8 {:marked true, :mark "o"}}))
 
 (def col-2-winner
  (into (sorted-map)
- {0 {:marked false, :mark nil},
-  1 {:marked false, :mark nil},
-  2 {:marked true, :mark "x"},
-  3 {:marked false, :mark nil},
-  4 {:marked false, :mark nil},
-  5 {:marked true, :mark "x"},
-  6 {:marked false, :mark nil},
-  7 {:marked true, :mark "o"},
-  8 {:marked true, :mark "x"}}))
+   {0 {:marked false, :mark nil},
+    1 {:marked false, :mark nil},
+    2 {:marked true, :mark "x"},
+    3 {:marked false, :mark nil},
+    4 {:marked false, :mark nil},
+    5 {:marked true, :mark "x"},
+    6 {:marked false, :mark nil},
+    7 {:marked true, :mark "o"},
+    8 {:marked true, :mark "x"}}))
 
 (def diag-0-winner
   (into (sorted-map)
-  {0 {:marked true, :mark "o"},
-   1 {:marked true, :mark "x"},
-   2 {:marked true, :mark "x"},
-   3 {:marked false, :mark nil},
-   4 {:marked true, :mark "o"},
-   5 {:marked false, :mark nil},
-   6 {:marked false, :mark nil},
-   7 {:marked false, :mark nil},
-   8 {:marked true, :mark "o"}}))
+    {0 {:marked true, :mark "o"},
+     1 {:marked true, :mark "x"},
+     2 {:marked true, :mark "x"},
+     3 {:marked false, :mark nil},
+     4 {:marked true, :mark "o"},
+     5 {:marked false, :mark nil},
+     6 {:marked false, :mark nil},
+     7 {:marked false, :mark nil},
+     8 {:marked true, :mark "o"}}))
+
+(def tied-board
+  (into (sorted-map)
+    {0 {:marked true, :mark "x"},
+     1 {:marked true, :mark "x"},
+     2 {:marked true, :mark "o"},
+     3 {:marked true, :mark "o"},
+     4 {:marked true, :mark "o"},
+     5 {:marked true, :mark "x"},
+     6 {:marked true, :mark "x"},
+     7 {:marked true, :mark "o"},
+     8 {:marked true, :mark "x"}}))
 
 (def full-board
   (into {} (for [space (range 9) value [{:marked true, :mark "x"}]] [space value])))
@@ -182,3 +194,21 @@
     (is (= false (diag-winner? row-0-winner))))
   (testing "returns false when there is no diagonal winner"
     (is (= false (diag-winner? blank-board)))))
+
+(deftest has-winner-test?
+  (testing "returns true when the board has a row winner"
+    (is (= true (has-winner? row-2-winner))))
+  (testing "returns true when the board has a diagonal winner"
+    (is (= true (has-winner? diag-0-winner))))
+  (testing "returns true when the board has a column winner"
+    (is (= true (has-winner? col-2-winner))))
+  (testing "returns false when the board does not have a winner"
+    (is (= false (has-winner? marked-board)))))
+
+(deftest tie-test
+  (testing "true when there is a tie"
+    (is (= true (tie? tied-board))))
+  (testing "false when game is ongoing"
+    (is (= false (tie? marked-board))))
+  (testing "false when there is a winner"
+    (is (= false (tie? col-2-winner)))))

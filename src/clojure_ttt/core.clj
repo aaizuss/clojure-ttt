@@ -73,3 +73,9 @@
       (> diag-index 1) false ; this is awful
       (winner-on-diag? board diag-index) true
       :else (recur (inc diag-index)))))
+
+(defn has-winner? [board]
+  (or (row-winner? board) (column-winner? board) (diag-winner? board)))
+
+(defn tie? [board]
+  (and (full? board) (not (has-winner? board))))
