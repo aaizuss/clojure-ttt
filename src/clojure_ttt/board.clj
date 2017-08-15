@@ -1,4 +1,4 @@
-(ns clojure-ttt.core
+(ns clojure-ttt.board
   (:gen-class))
 
 (defn new-board []

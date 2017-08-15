@@ -1,6 +1,6 @@
-(ns clojure-ttt.core-test
+(ns clojure-ttt.board-test
   (:require [clojure.test :refer :all]
-            [clojure-ttt.core :refer :all]))
+            [clojure-ttt.board :refer :all]))
 
 (deftest new-board-test
   (testing "new board creates empty board with 9 spaces"
