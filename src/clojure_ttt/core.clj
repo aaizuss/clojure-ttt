@@ -34,7 +34,27 @@
 (defn diagonals [board]
   [(diagonal-top-left board) (diagonal-top-right board)])
 
-;; todo: use this to find if there are winners
-;; this will be private
-(defn get-marked-spaces [board]
-  (for [[space info] board :when (:marked info)] [space info]))
+; thought the below would be helpful - apparently not
+; (defn get-marked-spaces [board]
+;   (for [[space info] board :when (:marked info)] {space info}))
+;
+; (defn get-spaces-with-mark [board mark]
+;   (apply assoc {} (interleave (flatten (for [[space info] board :when (= (:mark info) mark)] [space info])))))
+
+; helper for row-winner
+(defn row-marked? [row]
+  (let [mark-status (map :marked (vals row))]
+    (every? true? mark-status)))
+
+; design consideration: might be better to rename func and return the actual mark
+(defn row-winner? [board row-index]
+  (let [row (apply assoc {} (interleave (flatten ((rows board) row-index))))]
+    (if (row-marked? row) (apply = (map :mark (vals row))) false)))
+
+; not sure if this is more confusing than above (just used an extra let)
+; (defn row-winner? [board row-index]
+;   (let [row (apply assoc {} (interleave (flatten ((rows board) row-index))))]
+;     (if (row-marked? row)
+;       (let [marks (map :mark (vals row))]
+;         (apply = marks))
+;         false)))

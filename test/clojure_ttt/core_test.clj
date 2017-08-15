@@ -124,3 +124,9 @@
         [4 {:marked false, :mark nil}]
         [6 {:marked false, :mark nil}]]]
       (diagonals blank-board)))))
+
+(deftest row-winner-test
+  (testing "returns true when the given row has a winner"
+    (is (= true (row-winner? row-winner 0)))
+  (testing "returns false when the given row does not have a winner"
+    (is (= false (row-winner? row-winner 1))))))
