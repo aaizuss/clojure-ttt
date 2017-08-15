@@ -30,7 +30,7 @@
    7 {:marked false, :mark nil},
    8 {:marked true, :mark "x"}}))
 
-(def row-winner
+(def row-0-winner
  (into (sorted-map)
  {0 {:marked true, :mark "x"},
   1 {:marked true, :mark "x"},
@@ -127,6 +127,6 @@
 
 (deftest row-winner-test
   (testing "returns true when the given row has a winner"
-    (is (= true (row-winner? row-winner 0)))
+    (is (= true (row-winner? row-0-winner 0)))
   (testing "returns false when the given row does not have a winner"
-    (is (= false (row-winner? row-winner 1))))))
+    (is (= false (row-winner? row-0-winner 1))))))
