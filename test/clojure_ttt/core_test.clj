@@ -151,4 +151,14 @@
 
 (deftest winner-on-column-test
   (testing "returns true when the given column has a winner"
-    (is (= true (winner-on-column? col-2-winner 2)))))
+    (is (= true (winner-on-column? col-2-winner 2))))
+  (testing "returns false when the given column does not have a winner"
+    (is (= false (winner-on-column? col-2-winner 0)))))
+
+(deftest column-winner-test
+  (testing "returns true when the board has a column winner"
+    (is (= true (column-winner? col-2-winner))))
+  (testing "returns false when the board does not have a column winner"
+    (is (= false (column-winner? row-0-winner))))
+  (testing "returns false when there is no column winner"
+    (is (= false (column-winner? blank-board)))))
