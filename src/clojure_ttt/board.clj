@@ -49,13 +49,10 @@
       (winner-on-row? board row-index) true
       :else (recur (inc row-index)))))
 
-; nearly the same as winner-on-row?
-; later: refactor to has-winner?
 (defn winner-on-column? [board col-index]
   (let [column (apply assoc {} (interleave (flatten ((columns board) col-index))))]
     (if (consecutive-marks? column) (apply = (map :mark (vals column))) false)))
 
-; nearly same as row-winner?
 (defn column-winner? [board]
   (loop [col-index 0]
     (cond
@@ -70,7 +67,7 @@
 (defn diag-winner? [board]
   (loop [diag-index 0]
     (cond
-      (> diag-index 1) false ; this is awful
+      (> diag-index 1) false ; need to figure out a better way...
       (winner-on-diag? board diag-index) true
       :else (recur (inc diag-index)))))
 
