@@ -20,7 +20,7 @@
   (= 0 (count (empty-spaces board))))
 
 (defn rows [board]
-  (mapv vec (partition 3 (into (sorted-map) board))))
+  (mapv vec (partition 3 board)))
 
 (defn columns [board]
   (apply mapv vector (rows board)))
@@ -47,6 +47,8 @@
     (every? true? mark-status)))
 
 ; design consideration: might be better to rename func and return the actual mark
+; todo: rewrite this so i can map it over result of (rows board)
+; or rewrite (rows board) to return a more useful result and rewrite this
 (defn row-winner? [board row-index]
   (let [row (apply assoc {} (interleave (flatten ((rows board) row-index))))]
     (if (row-marked? row) (apply = (map :mark (vals row))) false)))
