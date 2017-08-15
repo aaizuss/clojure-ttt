@@ -27,6 +27,32 @@
    7 {:marked false, :mark nil},
    8 {:marked true, :mark "x"}})
 
+(def row-winner
+ (into (sorted-map)
+ {0 {:marked true, :mark "x"},
+  1 {:marked true, :mark "x"},
+  2 {:marked true, :mark "x"},
+  3 {:marked false, :mark nil},
+  4 {:marked true, :mark "o"},
+  5 {:marked false, :mark nil},
+  6 {:marked false, :mark nil},
+  7 {:marked false, :mark nil},
+  8 {:marked true, :mark "o"}}))
+
+(def column-winner
+ (into (sorted-map)
+ {0 {:marked true, :mark "x"},
+  1 {:marked false, :mark nil},
+  2 {:marked false, :mark nil},
+  3 {:marked true, :mark "x"},
+  4 {:marked false, :mark nil},
+  5 {:marked false, :mark nil},
+  6 {:marked true, :mark "x"},
+  7 {:marked true, :mark "o"},
+  8 {:marked true, :mark "o"}})
+
+
+
 (def full-board
   (into {} (for [space (range 9) value [{:marked true, :mark "x"}]] [space value])))
 

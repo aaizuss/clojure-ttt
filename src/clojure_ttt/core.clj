@@ -10,10 +10,6 @@
 (defn mark-space [board space marker]
   (assoc-in board [space] {:marked true :mark marker}))
 
-(defn remove-marker [board space]
-  "unmark the board at space (necessary for minimax algorithm)"
-  (assoc-in board [space] {:marked false :mark nil}))
-
 (defn empty-spaces [board]
   (keep (fn [[space-index space-info]] (if-not (:marked space-info) space-index)) board))
 
@@ -37,3 +33,8 @@
 
 (defn diagonals [board]
   [(diagonal-top-left board) (diagonal-top-right board)])
+
+;; todo: use this to find if there are winners
+;; this will be private
+(defn get-marked-spaces [board]
+  (for [[space info] board :when (:marked info)] [space info]))
