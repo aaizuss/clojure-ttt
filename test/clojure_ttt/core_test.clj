@@ -16,7 +16,10 @@
        8 {:marked false, :mark nil}}))))
 
 (def blank-board (new-board))
+
+; note: important that these are sorted maps
 (def marked-board
+  (into (sorted-map)
   {0 {:marked true, :mark "x"},
    1 {:marked false, :mark nil},
    2 {:marked false, :mark nil},
@@ -25,7 +28,7 @@
    5 {:marked false, :mark nil},
    6 {:marked false, :mark nil},
    7 {:marked false, :mark nil},
-   8 {:marked true, :mark "x"}})
+   8 {:marked true, :mark "x"}}))
 
 (def row-winner
  (into (sorted-map)
@@ -49,7 +52,7 @@
   5 {:marked false, :mark nil},
   6 {:marked true, :mark "x"},
   7 {:marked true, :mark "o"},
-  8 {:marked true, :mark "o"}})
+  8 {:marked true, :mark "o"}}))
 
 
 
