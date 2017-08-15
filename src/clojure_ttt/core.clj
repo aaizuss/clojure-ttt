@@ -34,8 +34,7 @@
 (defn diagonals [board]
   [(diagonal-top-left board) (diagonal-top-right board)])
 
-; helper for row-winner
-(defn row-marked? [row]
+(defn- row-marked? [row]
   (let [mark-status (map :marked (vals row))]
     (every? true? mark-status)))
 
@@ -45,3 +44,10 @@
 (defn winner-on-row? [board row-index]
   (let [row (apply assoc {} (interleave (flatten ((rows board) row-index))))]
     (if (row-marked? row) (apply = (map :mark (vals row))) false)))
+
+(defn row-winner? [board]
+  (loop [row-index 0]
+    (cond
+      (> row-index 2) false
+      (winner-on-row? board row-index) true
+      :else (recur (inc row-index)))))
