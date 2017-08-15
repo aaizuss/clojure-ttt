@@ -34,16 +34,13 @@
 (defn diagonals [board]
   [(diagonal-top-left board) (diagonal-top-right board)])
 
-(defn- row-marked? [row]
+(defn- consecutive-marks? [row]
   (let [mark-status (map :marked (vals row))]
     (every? true? mark-status)))
 
-; design consideration: might be better to rename func and return the actual mark
-; todo: rewrite this so i can map it over result of (rows board)
-; or rewrite (rows board) to return a more useful result and rewrite this
 (defn winner-on-row? [board row-index]
   (let [row (apply assoc {} (interleave (flatten ((rows board) row-index))))]
-    (if (row-marked? row) (apply = (map :mark (vals row))) false)))
+    (if (consecutive-marks? row) (apply = (map :mark (vals row))) false)))
 
 (defn row-winner? [board]
   (loop [row-index 0]
@@ -51,3 +48,15 @@
       (> row-index 2) false
       (winner-on-row? board row-index) true
       :else (recur (inc row-index)))))
+
+; nearly the same as winner-on-row?
+(defn winner-on-column? [board col-index]
+  (let [column (apply assoc {} (interleave (flatten ((columns board) col-index))))]
+    (if (consecutive-marks? column) (apply = (map :mark (vals column))) false)))
+
+(defn column-winner? [board]
+  (loop [col-index 0]
+    (cond
+      (> col-index 2) false
+      (winner-on-column? board col-index) true
+      :else (recur (inc col-index)))))

@@ -48,23 +48,23 @@
   1 {:marked false, :mark nil},
   2 {:marked true, :mark "x"},
   3 {:marked false, :mark nil},
-  4 {:marked true, :mark "x"},
-  5 {:marked false, :mark nil},
+  4 {:marked true, :mark nil},
+  5 {:marked true, :mark "x"},
   6 {:marked true, :mark "o"},
   7 {:marked true, :mark "o"},
   8 {:marked true, :mark "o"}}))
 
 (def col-2-winner
  (into (sorted-map)
- {0 {:marked true, :mark "x"},
+ {0 {:marked false, :mark nil},
   1 {:marked false, :mark nil},
-  2 {:marked false, :mark nil},
-  3 {:marked true, :mark "x"},
+  2 {:marked true, :mark "x"},
+  3 {:marked false, :mark nil},
   4 {:marked false, :mark nil},
-  5 {:marked false, :mark nil},
-  6 {:marked true, :mark "x"},
+  5 {:marked true, :mark "x"},
+  6 {:marked false, :mark nil},
   7 {:marked true, :mark "o"},
-  8 {:marked true, :mark "o"}}))
+  8 {:marked true, :mark "x"}}))
 
 (def full-board
   (into {} (for [space (range 9) value [{:marked true, :mark "x"}]] [space value])))
@@ -148,3 +148,7 @@
     (is (= true (row-winner? row-2-winner))))
   (testing "returns false when the board does not have a row winner"
     (is (= false (row-winner? col-2-winner)))))
+
+(deftest winner-on-column-test
+  (testing "returns true when the given column has a winner"
+    (is (= true (winner-on-column? col-2-winner 2)))))
