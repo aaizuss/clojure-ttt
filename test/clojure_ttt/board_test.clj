@@ -126,11 +126,10 @@
   (testing "returns false for a blank board"
     (is (= false (has-winner? blank-board)))))
 
-;
-; (deftest tie-test
-;   (testing "true when there is a tie"
-;     (is (= true (tie? tied-board))))
-;   (testing "false when game is ongoing"
-;     (is (= false (tie? marked-board))))
-;   (testing "false when there is a winner"
-;     (is (= false (tie? col-2-winner)))))
+(deftest tie-test
+  (testing "true when there is a tie"
+    (is (= true (tie? tied-board))))
+  (testing "false when game is ongoing"
+    (is (= false (tie? marked-board))))
+  (testing "false when there is a winner"
+    (is (= false (tie? col-2-winner)))))

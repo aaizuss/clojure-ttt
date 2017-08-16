@@ -65,9 +65,8 @@
         results (filter in-a-row? rows)]
       (> (count results) 0)))
 
-
-; (defn tie? [board]
-;   (and (full? board) (not (has-winner? board))))
+(defn tie? [board]
+  (and (full? board) (not (has-winner? board))))
 ;
 ; ;;;;;;;;;;; printing - will move to a different namespace ;;;;;;;;;;;
 ; ;; note to tom: i've just been testing thee in the repl - i have a lot to figure out
