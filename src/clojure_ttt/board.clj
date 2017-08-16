@@ -15,28 +15,34 @@
 (defn empty-spaces [board]
   (for [[space value] board :when (= empty-space value)] space))
 
+(defn full? [board]
+  (= 0 (count (empty-spaces board))))
+
+(defn rows [board]
+  (into [] (partition 3 (vals board))))
+
+; (defn indexed-rows [board]
+;   (map-indexed vector (rows board)))
+
+(defn columns [board]
+  (apply mapv vector (rows board)))
+
+; (defn indexed-columns [board]
+;   (map-indexed vector (columns board)))
 ;
-; (defn full? [board]
-;   (= 0 (count (empty-spaces board))))
-;
-; (defn rows [board]
-;   (mapv vec (partition 3 board)))
-;
-; (defn columns [board]
-;   (apply mapv vector (rows board)))
-;
-; (defn diagonal-top-left [board]
-;   (vec (take 3 (take-nth 4 board))))
-;
-; (defn diagonal-top-right [board]
-;   (vec (select-keys board [2 4 6])))
-;
-; (defn diagonals [board]
-;   [(diagonal-top-left board) (diagonal-top-right board)])
-;
-; (defn- consecutive-marks? [row]
-;   (let [mark-status (map :marked (vals row))]
-;     (every? true? mark-status)))
+(defn diagonal-top-left [board]
+  (vals (select-keys board [0 4 8])))
+
+(defn diagonal-top-right [board]
+  (vals (select-keys board [2 4 6])))
+
+(defn diagonals [board]
+  [(diagonal-top-left board) (diagonal-top-right board)])
+
+(defn in-a-row? [row]
+  (let [mark-status (map (fn [space] (= space empty-space)) row)
+        all-marked (every? false? mark-status)]
+    (and all-marked (apply = row))))
 ;
 ; (defn winner-on-row? [board row-index]
 ;   (let [row (apply assoc {} (interleave (flatten ((rows board) row-index))))]

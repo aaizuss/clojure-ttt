@@ -68,53 +68,43 @@
     (is (= (range 9) (empty-spaces blank-board))))
   (testing "marked spaces are not included in list"
     (is (= '(1 2 3 5 6 7) (empty-spaces marked-board)))))
-;
-; (deftest full-test
-;   (testing "returns false for empty board"
-;     (is (= false (full? blank-board))))
-;   (testing "returns true for a full board"
-;     (is (= true (full? full-board))))
-;   (testing "returns false for partially marked board"
-;     (is (= false (full? marked-board)))))
-;
-; (deftest rows-test
-;   (testing "returns board partitioned as rows"
-;     (is (=
-;       [[[0 {:marked false, :mark nil}]
-;         [1 {:marked false, :mark nil}]
-;         [2 {:marked false, :mark nil}]]
-;        [[3 {:marked false, :mark nil}]
-;         [4 {:marked false, :mark nil}]
-;         [5 {:marked false, :mark nil}]]
-;        [[6 {:marked false, :mark nil}]
-;         [7 {:marked false, :mark nil}]
-;         [8 {:marked false, :mark nil}]]]
-;           (rows blank-board)))))
-;
-; (deftest columns-test
-;   (testing "returns board partitioned as columns"
-;     (is (=
-;       [[[0 {:marked false, :mark nil}]
-;         [3 {:marked false, :mark nil}]
-;         [6 {:marked false, :mark nil}]]
-;        [[1 {:marked false, :mark nil}]
-;         [4 {:marked false, :mark nil}]
-;         [7 {:marked false, :mark nil}]]
-;        [[2 {:marked false, :mark nil}]
-;         [5 {:marked false, :mark nil}]
-;         [8 {:marked false, :mark nil}]]]
-;       (columns blank-board)))))
-;
-; (deftest diagonals-test
-;   (testing "returns board partitioned as diagonals"
-;     (is (=
-;       [[[0 {:marked false, :mark nil}]
-;         [4 {:marked false, :mark nil}]
-;         [8 {:marked false, :mark nil}]]
-;        [[2 {:marked false, :mark nil}]
-;         [4 {:marked false, :mark nil}]
-;         [6 {:marked false, :mark nil}]]]
-;       (diagonals blank-board)))))
+
+(deftest full-test
+  (testing "returns false for empty board"
+    (is (= false (full? blank-board))))
+  (testing "returns true for a full board"
+    (is (= true (full? full-board))))
+  (testing "returns false for partially marked board"
+    (is (= false (full? marked-board)))))
+
+(deftest rows-test
+  (testing "returns board partitioned as rows"
+    (is (=
+      [["x" "x" "x"] [:_ :_ :_] [:_ :_ :_]]
+      (rows row-0-winner)))))
+
+(deftest columns-test
+  (testing "returns board columns [[col 0] [col 1] [col 2]]"
+    (is (=
+       [[:_ :_ :_]
+        [:_ :_ :_]
+        ["o" "o" "o"]]
+      (columns col-2-winner)))))
+
+(deftest diagonals-test
+  (testing "returns board diagonals [[top left diag] [top right]]"
+    (is (= [["x" "x" "x"]
+            [:_ "x" :_]]
+      (diagonals diag-0-winner)))))
+
+(deftest in-a-row-test
+  (testing "given a row (collection of values from board ie a single diagonal),
+  returns true when the values are the same mark"
+    (let [row (get (diagonals diag-0-winner) 0)]
+      (is (= true (in-a-row? row)))))
+  (testing "returns false for an empty row"
+    (let [row '(:_ :_ :_)]
+      (is (= false (in-a-row? row))))))
 ;
 ; (deftest winner-on-row-test
 ;   (testing "returns true when the given row has a winner"
