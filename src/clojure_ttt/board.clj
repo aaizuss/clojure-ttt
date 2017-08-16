@@ -12,11 +12,9 @@
 (defn mark-space [board space marker]
   (assoc board space marker))
 
-; (defn empty-spaces [board]
-;   (keep (fn [[space-index space-info]] (if-not (:marked space-info) space-index)) board))
-;
-; (defn empty-spaces-alt [board]
-;   (for [[space-index space-info] board :when (not (:marked space-info))] space-index))
+(defn empty-spaces [board]
+  (for [[space value] board :when (= empty-space value)] space))
+
 ;
 ; (defn full? [board]
 ;   (= 0 (count (empty-spaces board))))

@@ -63,11 +63,11 @@
                 mark (get board 1)]
         mark)))))
 
-; (deftest empty-spaces-test
-;   (testing "all spaces are empty on a new board"
-;     (is (= (set (range 9)) (set (empty-spaces blank-board))))
-;   (testing "marked spaces are not included in list"
-;     (is (= (set '(1 2 3 5 6 7)) (set (empty-spaces marked-board)))))))
+(deftest empty-spaces-test
+  (testing "all spaces are empty on a new board"
+    (is (= (range 9) (empty-spaces blank-board))))
+  (testing "marked spaces are not included in list"
+    (is (= '(1 2 3 5 6 7) (empty-spaces marked-board)))))
 ;
 ; (deftest full-test
 ;   (testing "returns false for empty board"
