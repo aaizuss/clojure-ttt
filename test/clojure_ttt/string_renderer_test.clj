@@ -33,4 +33,9 @@
 
 (deftest row-strings-test
   (testing "returns 2d list of strings representing rows"
-    (is (= ['(" x " " 1 " " 2 ") (list "\n--- --- --- \n") '(" 3 " " x " " 5 ") (list "\n--- --- --- \n") '(" 6 " " 7 " " x ")] (row-strings diagonal-winner)))))
+    (is (= (row-strings diagonal-winner)
+            ['(" x " " 1 " " 2 ")
+            (list "\n--- --- --- \n")
+            '(" 3 " " x " " 5 ")
+            (list "\n--- --- --- \n")
+            '(" 6 " " 7 " " x ")]))))

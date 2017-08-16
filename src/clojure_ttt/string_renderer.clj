@@ -34,8 +34,9 @@
 
 (defn row-strings [board]
   (let [board-string-list (string-list-from-board board)
-        partitioned (partition 3 board-string-list)]
-      (interpose (list (row-divider)) partitioned)))
+        partitioned (partition 3 board-string-list)
+        divider (list (row-divider))]
+      (interpose divider partitioned)))
 
 
 
