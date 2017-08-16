@@ -11,17 +11,35 @@
         parts (take 3 (repeat part))]
       (wrap-newline (apply str parts))))
 
-(defn render-space [board index]
-  (let [marker (board index)]
-    (if (= marker board/empty-space)
+
+(defn board-to-indexed-vec [board]
+  (vec (interleave board)))
+
+(defn render-space [[index marker]]
+  (if (= marker board/empty-space)
       (str " " index " ")
-      (str " " marker " "))))
+      (str " " marker " ")))
+
+(defn string-list-from-board [board]
+  (let [board-vector (board-to-indexed-vec board)]
+    (map render-space board-vector)))
+
+; (defn string-list-from-board-2 [board]
+;   (let [board-vector (board-to-indexed-vec board)]
+;     (interpose "|" (map render-space board-vector))))
+
+(defn board-to-string [board]
+  (let [board-vector (board-to-indexed-vec board)]
+    (apply str (map render-space board-vector))))
+
+(defn row-strings [board]
+  (let [board-string-list (string-list-from-board board)
+        partitioned (partition 3 board-string-list)]
+      (interpose (list (row-divider)) partitioned)))
 
 
-; (defn render-spaces [board]
-;   (for [[space value] board :when (if (= empty-space value) )] space))
-;
-;
+
+
 ; ;  0 | 1 | 2
 ; ; ---*---*---
 ; ;  3 | 4 | 5
