@@ -105,7 +105,15 @@
   (testing "returns false for an empty row"
     (let [row '(:_ :_ :_)]
       (is (= false (in-a-row? row))))))
-;
+
+(deftest all-rows-test
+  (testing "returns a collection of row (diag/col/row) from the board
+  eg: [[row 0] [row 1] [row 2][diag 0] [diag 1]...]"
+    (is (= (all-rows row-0-winner)
+      [["x" "x" "x"] [:_ :_ :_] [:_ :_ :_]
+      ["x" :_ :_] ["x" :_ :_] ["x" :_ :_]
+      ["x" :_ :_] ["x" :_ :_]]))))
+
 ; (deftest winner-on-row-test
 ;   (testing "returns true when the given row has a winner"
 ;     (is (= true (winner-on-row? row-0-winner 0)))

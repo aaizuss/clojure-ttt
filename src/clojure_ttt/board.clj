@@ -43,6 +43,12 @@
   (let [mark-status (map (fn [space] (= space empty-space)) row)
         all-marked (every? false? mark-status)]
     (and all-marked (apply = row))))
+
+(defn all-rows [board]
+  (let [rows (rows board)
+        columns (columns board)
+        diagonals (diagonals board)]
+    (concat rows columns diagonals)))
 ;
 ; (defn winner-on-row? [board row-index]
 ;   (let [row (apply assoc {} (interleave (flatten ((rows board) row-index))))]
