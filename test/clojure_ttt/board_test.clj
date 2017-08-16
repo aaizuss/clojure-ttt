@@ -114,51 +114,18 @@
       ["x" :_ :_] ["x" :_ :_] ["x" :_ :_]
       ["x" :_ :_] ["x" :_ :_]]))))
 
-; (deftest winner-on-row-test
-;   (testing "returns true when the given row has a winner"
-;     (is (= true (winner-on-row? row-0-winner 0)))
-;   (testing "returns false when the given row does not have a winner"
-;     (is (= false (winner-on-row? row-0-winner 1))))))
-;
-; (deftest row-winner-test
-;   (testing "returns true when the board has a row winner (0)"
-;     (is (= true (row-winner? row-0-winner))))
-;   (testing "returns true when the board has a row winner (2)"
-;     (is (= true (row-winner? row-2-winner))))
-;   (testing "returns false when the board does not have a row winner"
-;     (is (= false (row-winner? col-2-winner)))))
-;
-; (deftest winner-on-column-test
-;   (testing "returns true when the given column has a winner"
-;     (is (= true (winner-on-column? col-2-winner 2))))
-;   (testing "returns false when the given column does not have a winner"
-;     (is (= false (winner-on-column? col-2-winner 0)))))
-;
-; (deftest column-winner-test
-;   (testing "returns true when the board has a column winner"
-;     (is (= true (column-winner? col-2-winner))))
-;   (testing "returns false when the board does not have a column winner"
-;     (is (= false (column-winner? row-0-winner))))
-;   (testing "returns false when there is no column winner"
-;     (is (= false (column-winner? blank-board)))))
-;
-; (deftest diag-winner-test
-;   (testing "returns true when the board has a diagonal winner"
-;     (is (= true (diag-winner? diag-0-winner))))
-;   (testing "returns false when the board does not have a diagonal winner"
-;     (is (= false (diag-winner? row-0-winner))))
-;   (testing "returns false when there is no diagonal winner"
-;     (is (= false (diag-winner? blank-board)))))
-;
-; (deftest has-winner-test?
-;   (testing "returns true when the board has a row winner"
-;     (is (= true (has-winner? row-2-winner))))
-;   (testing "returns true when the board has a diagonal winner"
-;     (is (= true (has-winner? diag-0-winner))))
-;   (testing "returns true when the board has a column winner"
-;     (is (= true (has-winner? col-2-winner))))
-;   (testing "returns false when the board does not have a winner"
-;     (is (= false (has-winner? marked-board)))))
+(deftest has-winner-test
+  (testing "returns true when there is a winner on a row"
+    (is (= true (has-winner? row-0-winner))))
+  (testing "returns true when there is a winner on a diagonal"
+    (is (= true (has-winner? diag-0-winner))))
+  (testing "returns true when there is a winner on a column"
+    (is (= true (has-winner? col-2-winner))))
+  (testing "returns false when there is no winner"
+    (is (= false (has-winner? marked-board))))
+  (testing "returns false for a blank board"
+    (is (= false (has-winner? blank-board)))))
+
 ;
 ; (deftest tie-test
 ;   (testing "true when there is a tie"

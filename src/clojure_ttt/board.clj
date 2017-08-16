@@ -48,44 +48,24 @@
   (let [rows (rows board)
         columns (columns board)
         diagonals (diagonals board)]
-    (concat rows columns diagonals)))
-;
-; (defn winner-on-row? [board row-index]
-;   (let [row (apply assoc {} (interleave (flatten ((rows board) row-index))))]
-;     (if (consecutive-marks? row) (apply = (map :mark (vals row))) false)))
-;
-; (defn row-winner? [board]
-;   (loop [row-index 0]
-;     (cond
-;       (> row-index 2) false ; try not to rely on literals!
-;       (winner-on-row? board row-index) true
-;       :else (recur (inc row-index)))))
-;
-; (defn winner-on-column? [board col-index]
-;   (let [column (apply assoc {} (interleave (flatten ((columns board) col-index))))]
-;     (if (consecutive-marks? column) (apply = (map :mark (vals column))) false)))
-;
-; (defn column-winner? [board]
-;   (loop [col-index 0]
-;     (cond
-;       (> col-index 2) false
-;       (winner-on-column? board col-index) true
-;       :else (recur (inc col-index)))))
-;
-; (defn winner-on-diag? [board diag-index]
-;   (let [diag (apply assoc {} (interleave (flatten ((diagonals board) diag-index))))]
-;     (if (consecutive-marks? diag) (apply = (map :mark (vals diag))) false)))
-;
-; (defn diag-winner? [board]
-;   (loop [diag-index 0]
-;     (cond
-;       (> diag-index 1) false ; need to figure out a better way...
-;       (winner-on-diag? board diag-index) true
-;       :else (recur (inc diag-index)))))
-;
-; (defn has-winner? [board]
-;   (or (row-winner? board) (column-winner? board) (diag-winner? board)))
-;
+    (into [] (concat rows columns diagonals))))
+
+; todo: figure out what is the most efficient and cleanest
+; way to check if there is a winner
+(defn- find-first
+         [f collection]
+         (first (filter f collection)))
+
+; move this to another namespace (might be useful when returning winner)
+(defn winning-row [board]
+  (find-first in-a-row? (all-rows board)))
+
+(defn has-winner? [board]
+  (let [rows (all-rows board)
+        results (filter in-a-row? rows)]
+      (> (count results) 0)))
+
+
 ; (defn tie? [board]
 ;   (and (full? board) (not (has-winner? board))))
 ;
