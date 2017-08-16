@@ -97,16 +97,12 @@
 (defn indices-for-row [row-index]
   (get (vec (map vec (partition 3 (range 9))))) row-index)
 
-(defn render-row [board row-index]
-  (map (partial render-space (get-row board)) ))
-
 
 (defn row-divider []
   (let [part (str (apply str (take 3 (repeat "-"))) " ")
         parts (take 3 (repeat part))]
       (apply str parts)))
 
-; (apply str (interpose " | " ["1" "2" "3"]))
 
 ;  0 | 1 | 2
 ; ---*---*---
