@@ -2,7 +2,6 @@
   (:require [clojure.string :as string]
             [clojure-ttt.board :as board]))
 
-; is it better to just use the literal "--- --- ---"
 (defn wrap-newline [s]
   (str "\n" s "\n"))
 
@@ -24,9 +23,6 @@
   (let [board-vector (board-to-indexed-vec board)]
     (map render-space board-vector)))
 
-; (defn string-list-from-board-2 [board]
-;   (let [board-vector (board-to-indexed-vec board)]
-;     (interpose "|" (map render-space board-vector))))
 
 (defn board-to-string [board]
   (let [board-vector (board-to-indexed-vec board)]
