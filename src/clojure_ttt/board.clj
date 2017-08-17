@@ -3,8 +3,12 @@
 
 (def empty-space :_)
 
+(def board-dimension 3)
+
+(def num-spaces (* board-dimension board-dimension))
+
 (defn new-board []
-  (into (sorted-map) (for [space (range 9) value [empty-space]] [space value])))
+  (into (sorted-map) (for [space (range num-spaces) value [empty-space]] [space value])))
 
 (defn marked? [board space]
   (not (= (get board space) empty-space)))
@@ -13,7 +17,7 @@
   (assoc board space marker))
 
 (defn empty-spaces [board]
-  (for [[space value] board :when (= empty-space value)] space))
+  (into [] (for [[space value] board :when (= empty-space value)] space)))
 
 (defn full? [board]
   (= 0 (count (empty-spaces board))))
