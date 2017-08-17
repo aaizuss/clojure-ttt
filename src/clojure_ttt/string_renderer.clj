@@ -52,6 +52,9 @@
 (defn invalid-mark [mark]
   (str mark " is an invalid mark. "))
 
+(def invalid-move
+  "You can't move there.")
+
 (defn taken-space [space]
   (str "You can't move to " space ". It's taken! "))
 
