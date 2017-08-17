@@ -18,3 +18,11 @@
            (do
              (renderer/invalid-marker-msg marker opponent-marker)
              (recur {:order-num order-num :opponent-marker opponent-marker})))))
+
+(defn get-move [board]
+  (let [move (io/prompt renderer/choose-space)]
+    (if (validator/valid-move? board move)
+        move 
+        (do
+          renderer/invalid-move
+          (recur board)))))
