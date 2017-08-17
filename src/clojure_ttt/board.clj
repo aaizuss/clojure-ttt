@@ -17,7 +17,7 @@
   (assoc board space marker))
 
 (defn empty-spaces [board]
-  (for [[space value] board :when (= empty-space value)] space))
+  (into [] (for [[space value] board :when (= empty-space value)] space)))
 
 (defn full? [board]
   (= 0 (count (empty-spaces board))))
