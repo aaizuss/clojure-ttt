@@ -38,3 +38,34 @@
 (defn render-board [board]
   (let [pieces (row-strings board)]
     (apply str (flatten pieces))))
+
+(def welcome
+  (str "|----------------------------|\n"
+       "|-- Welcome to Tic Tac Toe --|\n"
+       "|----------------------------|"))
+
+(defn marker-selection [order]
+  (str "Player " order ", enter a single letter for your mark: "))
+
+(def choose-space "Enter a number 0-8 to make a move: ")
+
+(defn invalid-mark [mark]
+  (str mark " is an invalid mark. "))
+
+(defn taken-space [space]
+  (str "You can't move to " space ". It's taken! "))
+
+(defn not-a-number [space]
+  (str "You can't move to " space ". It's not on the board!"))
+
+(defn invalid-marker-msg [input-marker opponent-marker]
+  (cond
+    (= input-marker " ")
+      "You must think you're very clever! Your mark cannot be a space."
+    (> (count input-marker) 1)
+      (str (invalid-mark input-marker) "Markers must be a single letter.")
+    (not (re-matches #"^[a-zA-Z]$" input-marker))
+      (str (invalid-mark input-marker) "You must choose a letter.")
+    (= input-marker opponent-marker)
+      (str (invalid-mark input-marker) "Your opponent already chose that marker.")
+    :else "Your marker choice is invalid."))
