@@ -35,21 +35,10 @@
 (defn row-strings [board]
   (let [board-string-list (string-list-from-board board)
         partitioned (partition 3 board-string-list)
+        rows (map (fn [item] (interpose "|" item)) partitioned)
         divider (list (row-divider))]
-      (interpose divider partitioned)))
+      (interpose divider rows)))
 
-
-
-
-; ;  0 | 1 | 2
-; ; ---*---*---
-; ;  3 | 4 | 5
-; ; ---*---*---
-; ;  6 | 7 | 8
-; ;
-; ;  0 | 1 | 2
-; ; --- --- ---
-; ;  3 | 4 | 5
-; ; --- --- ---
-; ;  6 | 7 | 8
-; ;
+(defn render-board [board]
+  (let [pieces (row-strings board)]
+    (apply str (flatten pieces))))

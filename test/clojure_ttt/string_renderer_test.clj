@@ -34,8 +34,13 @@
 (deftest row-strings-test
   (testing "returns 2d list of strings representing rows"
     (is (= (row-strings diagonal-winner)
-            ['(" x " " 1 " " 2 ")
+            ['(" x " "|" " 1 " "|" " 2 ")
             (list "\n--- --- --- \n")
-            '(" 3 " " x " " 5 ")
+            '(" 3 " "|" " x " "|" " 5 ")
             (list "\n--- --- --- \n")
-            '(" 6 " " 7 " " x ")]))))
+            '(" 6 " "|" " 7 " "|" " x ")]))))
+
+(deftest render-board-test
+  (testing "renders the board as a string (with artistic flair)"
+    (is (= (render-board diagonal-winner)
+            " x | 1 | 2 \n--- --- --- \n 3 | x | 5 \n--- --- --- \n 6 | 7 | x "))))
