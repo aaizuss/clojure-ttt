@@ -24,3 +24,10 @@
   (and
     (valid-board-position? board proposed-move)
     (= false (board/marked? board (utils/input-to-num proposed-move)))))
+
+;; very similar function in string-renderer
+;; because i have specific messages there...
+(defn valid-marker? [input-mark opponent-mark]
+  (and (= 1 (count input-mark))
+       (= 1 (count (re-matches #"^[a-zA-Z]$" input-mark)))
+       (not (= input-mark opponent-mark))))
