@@ -22,7 +22,7 @@
 (defn get-move [board]
   (let [move (io/prompt renderer/choose-space)]
     (if (validator/valid-move? board move)
-        move 
+        move
         (do
           renderer/invalid-move
           (recur board)))))
