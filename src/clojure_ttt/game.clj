@@ -19,7 +19,7 @@
   (let [move (view/get-move board)
         marked-board (board/mark-space board move current-player)]
     (if (or (board/has-winner? marked-board) (board/tie? marked-board))
-        (println "game over")
+        (println "Game Over!")
         (recur {:board marked-board :current-player opponent :opponent current-player}))))
 
 ; show board when game is over
