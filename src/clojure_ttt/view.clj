@@ -5,15 +5,11 @@
             [clojure-ttt.utilities :as utils]))
 
 ; is this silly?
-; (defn show-board [board]
-;   (io/show (renderer/render-board board)))
+(defn show-board [board]
+  (io/show (renderer/render-board board)))
 
-; (def show-welcome []
-;   (io/show renderer/welcome))
-
-; (defn show-start-screen
-;   (show-welcome)
-;   (show-board [board/new-board]))
+(defn show-welcome []
+  (io/show renderer/welcome))
 
 (defn get-marker
   [& {:keys [order-num opponent-marker] :or {order-num 1 opponent-marker ""}}]
