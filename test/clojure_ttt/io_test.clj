@@ -11,4 +11,7 @@
   (testing "returns user input"
     (is (= "Nothing"
         (with-in-str "Nothing"
-          (prompt "What's up?"))))))
+          (prompt "What's up?")))))
+  (testing "returns user input without newline"
+    (is (= "5"
+        (with-in-str "5\n" (prompt "Pick a number"))))))
