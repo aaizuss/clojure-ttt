@@ -21,12 +21,12 @@
             (get-marker :order-num 2 :opponent-marker "a"))))))
 
 (deftest get-move-test
-  (testing "returns a valid move"
-    (is (= "4"
+  (testing "returns a valid move as an int"
+    (is (= 4
         (with-in-str "4" (get-move blank-board)))))
   (testing "continues asking for a move until it is valid"
-    (is (= "2"
+    (is (= 2
         (with-in-str "10\na\n2" (get-move blank-board)))))
   (testing "continues asking for a marker if space is taken"
-    (is (= "0"
+    (is (= 0
         (with-in-str "6\n0" (get-move marked-board))))))
