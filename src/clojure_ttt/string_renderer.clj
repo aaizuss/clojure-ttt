@@ -2,13 +2,13 @@
   (:require [clojure.string :as string]
             [clojure-ttt.board :as board]))
 
+(declare row-divider row-strings)
 (defn wrap-newline [s]
   (str "\n" s "\n"))
 
-(defn row-divider []
-  (let [part (str (apply str (take 3 (repeat "-"))) " ")
-        parts (take 3 (repeat part))]
-      (wrap-newline (apply str parts))))
+(defn render-board [board]
+  (let [pieces (row-strings board)]
+    (apply str (flatten pieces))))
 
 (defn row-strings [board]
   (let [board-string-list (board/to-string-list board)
@@ -17,9 +17,10 @@
         divider (list (row-divider))]
       (interpose divider rows)))
 
-(defn render-board [board]
-  (let [pieces (row-strings board)]
-    (apply str (flatten pieces))))
+(defn row-divider []
+  (let [part (str (apply str (take 3 (repeat "-"))) " ")
+        parts (take 3 (repeat part))]
+      (wrap-newline (apply str parts))))
 
 (def welcome
   (str "|----------------------------|\n"
@@ -46,14 +47,26 @@
 (defn turn-message [marker]
   (str "It is " marker "'s turn."))
 
+(defn invalid-mark-space [marker]
+  "You must think you're very clever! Your mark cannot be a space.")
+
+(defn invalid-mark-too-long [marker]
+  (str (invalid-mark marker) "Markers must be a single letter."))
+
+(defn invalid-mark-special-char [marker]
+  (str (invalid-mark marker) "You must choose a letter."))
+
+(defn invalid-mark-already-taken [marker]
+  (str (invalid-mark marker) "Your opponent already chose that marker."))
+
 (defn invalid-marker-msg [input-marker opponent-marker]
   (cond
     (= input-marker " ")
-      "You must think you're very clever! Your mark cannot be a space."
+      (invalid-mark-space input-marker)
     (> (count input-marker) 1)
-      (str (invalid-mark input-marker) "Markers must be a single letter.")
+      (invalid-mark-too-long input-marker)
     (not (re-matches #"^[a-zA-Z]$" input-marker))
-      (str (invalid-mark input-marker) "You must choose a letter.")
+      (invalid-mark-special-char input-marker)
     (= input-marker opponent-marker)
-      (str (invalid-mark input-marker) "Your opponent already chose that marker.")
+      (invalid-mark-already-taken input-marker)
     :else "Your marker choice is invalid."))
