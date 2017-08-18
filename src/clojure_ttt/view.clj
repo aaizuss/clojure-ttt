@@ -1,13 +1,14 @@
 (ns clojure-ttt.view
   (:require [clojure-ttt.string-renderer :as renderer]
             [clojure-ttt.io :as io]
-            [clojure-ttt.validator :as validator]))
+            [clojure-ttt.validator :as validator]
+            [clojure-ttt.utilities :as utils]))
 
 ; is this silly?
 ; (defn show-board [board]
 ;   (io/show (renderer/render-board board)))
 
-; (defn show-welcome []
+; (def show-welcome []
 ;   (io/show renderer/welcome))
 
 ; (defn show-start-screen
@@ -26,7 +27,7 @@
 (defn get-move [board]
   (let [move (io/prompt renderer/choose-space)]
     (if (validator/valid-move? board move)
-        move
+        (utils/to-num move)
         (do
           renderer/invalid-move
           (recur board)))))
