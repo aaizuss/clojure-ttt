@@ -4,11 +4,15 @@
             [clojure-ttt.validator :as validator]))
 
 ; is this silly?
-(defn show-board [board]
-  (io/show (renderer/render-board board)))
+; (defn show-board [board]
+;   (io/show (renderer/render-board board)))
 
-; (def show-welcome
+; (defn show-welcome []
 ;   (io/show renderer/welcome))
+
+; (defn show-start-screen
+;   (show-welcome)
+;   (show-board [board/new-board]))
 
 (defn get-marker
   [& {:keys [order-num opponent-marker] :or {order-num 1 opponent-marker ""}}]
