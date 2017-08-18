@@ -61,6 +61,9 @@
 (defn not-a-number [space]
   (str "You can't move to " space ". It's not on the board!"))
 
+(defn turn-message [marker]
+  (str "It is " marker "'s turn."))
+
 (defn invalid-marker-msg [input-marker opponent-marker]
   (cond
     (= input-marker " ")
