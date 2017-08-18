@@ -77,6 +77,12 @@
   (testing "returns false for partially marked board"
     (is (= false (full? marked-board)))))
 
+(deftest space-exists-test
+  (testing "0 exists on the board"
+    (is (= true (space-exists? 0))))
+  (testing "9 does not exist on the board"
+    (is (= false (space-exists? 9)))))
+
 (deftest rows-test
   (testing "returns board partitioned as rows"
     (is (=

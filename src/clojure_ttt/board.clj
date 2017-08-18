@@ -22,6 +22,9 @@
 (defn full? [board]
   (= 0 (count (empty-spaces board))))
 
+(defn space-exists? [space]
+  (and (<= 0 space) (< space num-spaces)))
+
 (defn rows [board]
   (into [] (partition 3 (vals board))))
 

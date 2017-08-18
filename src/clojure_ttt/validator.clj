@@ -8,14 +8,10 @@
     true
   (catch Exception e false)))
 
-; should probably be private...
-(defn space-exists? [board space]
-  (utils/in-range? space 0 board/num-spaces))
-
 ; might be better to put a variation of this in board ns
 (defn valid-board-position? [board space]
   (and (is-num? space)
-       (space-exists? board (utils/to-num space))))
+       (board/pace-exists? (utils/to-num space))))
 
 (defn valid-move? [board proposed-move]
   (and
