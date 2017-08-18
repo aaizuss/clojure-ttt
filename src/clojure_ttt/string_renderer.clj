@@ -2,6 +2,8 @@
   (:require [clojure.string :as string]
             [clojure-ttt.board :as board]))
 
+; TODO: put strings in a config file, read it in
+
 (declare row-divider row-strings)
 (defn wrap-newline [s]
   (str "\n" s "\n"))
