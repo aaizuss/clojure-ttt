@@ -83,6 +83,25 @@
   (testing "9 does not exist on the board"
     (is (= false (space-exists? 9)))))
 
+(deftest to-indexed-vec-test
+  (testing "converts board structure to an indexed vector"
+    (is (= [[0 :_] [1 :_] [2 :_]
+            [3 :_] [4 :_] [5 :_]
+            [6 :_] [7 :_] [8 :_]]
+            (to-indexed-vec blank-board)))))
+
+(deftest render-space-test
+  (testing "the space index when the space is empty"
+    (is (= " 4 "
+      (render-space [4 :_])))
+  (testing "the space index when the space is marked"
+    (is (= " x "
+      (render-space [1 "x"]))))))
+
+(deftest to-string-list-test
+  (testing "converts the board to a list of strings"
+    (is (= '(" x " " 1 " " 2 " " 3 " " x " " 5 " " 6 " " 7 " " x ") (to-string-list diag-0-winner)))))
+
 (deftest rows-test
   (testing "returns board partitioned as rows"
     (is (=

@@ -8,7 +8,8 @@
 (def num-spaces (* board-dimension board-dimension))
 
 (defn new-board []
-  (into (sorted-map) (for [space (range num-spaces) value [empty-space]] [space value])))
+  (into (sorted-map)
+  (for [space (range num-spaces) value [empty-space]] [space value])))
 
 (defn marked? [board space]
   (not (= (get board space) empty-space)))
@@ -24,6 +25,18 @@
 
 (defn space-exists? [space]
   (and (<= 0 space) (< space num-spaces)))
+
+(defn to-indexed-vec [board]
+  (vec (interleave board)))
+
+(defn render-space [[index marker]]
+  (if (= marker empty-space)
+      (str " " index " ")
+      (str " " marker " ")))
+
+(defn to-string-list [board]
+  (let [board-vector (to-indexed-vec board)]
+    (map render-space board-vector)))
 
 (defn rows [board]
   (into [] (partition 3 (vals board))))
