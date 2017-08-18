@@ -15,3 +15,7 @@
     (is (= false (in-range? 9 0 9))))
   (testing "4 is in [0, 9)"
     (is (= true (in-range? 4 0 9)))))
+
+(deftest clean-string-test
+  (testing "removes newline"
+    (is (= "5" (clean-string "5\n")))))
