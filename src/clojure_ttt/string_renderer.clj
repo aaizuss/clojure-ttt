@@ -29,10 +29,10 @@
        "|-- Welcome to Tic Tac Toe --|\n"
        "|----------------------------|"))
 
-(def win-message [winning-mark]
+(defn win-message [winning-mark]
   (str winning-mark " wins!"))
 
-(def tie-message []
+(defn tie-message []
   (str "Tie Game!"))
 
 (defn marker-selection [order]
