@@ -17,7 +17,7 @@
       (if (validator/valid-marker? marker opponent-marker)
            marker
            (do
-             (renderer/invalid-marker-msg marker opponent-marker)
+             (io/show (renderer/invalid-marker-msg marker opponent-marker))
              (recur {:order-num order-num :opponent-marker opponent-marker})))))
 
 (defn get-move [board]
@@ -25,5 +25,5 @@
     (if (validator/valid-move? board move)
         (utils/to-num move)
         (do
-          renderer/invalid-move
+          (io/show renderer/invalid-move)
           (recur board)))))
