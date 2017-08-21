@@ -39,4 +39,7 @@
 (deftest game-loop-test
   (testing "halts when o wins and displays message that o wins"
     (is (= (str before-win-message "o wins!\n")
-        (with-out-str (with-in-str "6" (game-loop {:board o-close-to-win :current-player "o" :opponent "x"})))))))
+        (with-out-str (with-in-str "6" (game-loop
+                                          {:board o-close-to-win
+                                            :current-player "o"
+                                            :opponent "x"})))))))
