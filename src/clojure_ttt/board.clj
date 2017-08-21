@@ -39,7 +39,7 @@
     (map render-space board-vector)))
 
 (defn rows [board]
-  (into [] (partition 3 (vals board))))
+  (into [] (partition board-dimension (vals board))))
 
 (defn columns [board]
   (apply mapv vector (rows board)))
