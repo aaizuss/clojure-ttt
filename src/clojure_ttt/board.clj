@@ -64,12 +64,10 @@
         diagonals (diagonals board)]
     (into [] (concat rows columns diagonals))))
 
-; todo: figure out what is the most efficient and cleanest
-; way to check if there is a winner
+; eventually might want to move all of the following to another namespace
 (defn- find-first [f collection]
   (first (filter f collection)))
 
-; move this to another namespace? (might be useful when returning winner)
 (defn winning-row [board]
   (find-first in-a-row? (all-rows board)))
 
