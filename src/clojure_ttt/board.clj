@@ -70,9 +70,12 @@
          [f collection]
          (first (filter f collection)))
 
-; move this to another namespace (might be useful when returning winner)
+; move this to another namespace? (might be useful when returning winner)
 (defn winning-row [board]
   (find-first in-a-row? (all-rows board)))
+
+(defn get-winner [board]
+  (first (winning-row board)))
 
 (defn has-winner? [board]
   (let [rows (all-rows board)

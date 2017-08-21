@@ -151,6 +151,10 @@
   (testing "returns false for a blank board"
     (is (= false (has-winner? blank-board)))))
 
+(deftest get-winner-test
+  (testing "returns winning mark"
+    (is (= "x" (get-winner diag-0-winner)))))
+
 (deftest tie-test
   (testing "true when there is a tie"
     (is (= true (tie? tied-board))))
