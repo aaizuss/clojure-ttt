@@ -2,47 +2,39 @@
   (:require [clojure.string :as string]
             [clojure-ttt.board :as board]))
 
+; TODO: put strings in a config file, read it in
+
+(declare row-divider row-strings)
 (defn wrap-newline [s]
   (str "\n" s "\n"))
+
+(defn render-board [board]
+  (let [pieces (row-strings board)]
+    (wrap-newline (apply str (flatten pieces)))))
+
+(defn row-strings [board]
+  (let [board-string-list (board/to-string-list board)
+        partitioned (partition 3 board-string-list)
+        rows (map (fn [item] (interpose "|" item)) partitioned)
+        divider (list (row-divider))]
+      (interpose divider rows)))
 
 (defn row-divider []
   (let [part (str (apply str (take 3 (repeat "-"))) " ")
         parts (take 3 (repeat part))]
       (wrap-newline (apply str parts))))
 
-
-(defn board-to-indexed-vec [board]
-  (vec (interleave board)))
-
-(defn render-space [[index marker]]
-  (if (= marker board/empty-space)
-      (str " " index " ")
-      (str " " marker " ")))
-
-(defn string-list-from-board [board]
-  (let [board-vector (board-to-indexed-vec board)]
-    (map render-space board-vector)))
-
-
-(defn board-to-string [board]
-  (let [board-vector (board-to-indexed-vec board)]
-    (apply str (map render-space board-vector))))
-
-(defn row-strings [board]
-  (let [board-string-list (string-list-from-board board)
-        partitioned (partition 3 board-string-list)
-        rows (map (fn [item] (interpose "|" item)) partitioned)
-        divider (list (row-divider))]
-      (interpose divider rows)))
-
-(defn render-board [board]
-  (let [pieces (row-strings board)]
-    (apply str (flatten pieces))))
-
 (def welcome
-  (str "|----------------------------|\n"
-       "|-- Welcome to Tic Tac Toe --|\n"
-       "|----------------------------|"))
+  (wrap-newline
+    (str "|----------------------------|\n"
+         "|-- Welcome to Tic Tac Toe --|\n"
+         "|----------------------------|")))
+
+(defn win-message [winning-mark]
+  (str winning-mark " wins!"))
+
+(defn tie-message []
+  (str "Tie Game!"))
 
 (defn marker-selection [order]
   (str "Player " order ", enter a single letter for your mark: "))
@@ -64,14 +56,11 @@
 (defn turn-message [marker]
   (str "It is " marker "'s turn."))
 
-(defn invalid-marker-msg [input-marker opponent-marker]
-  (cond
-    (= input-marker " ")
-      "You must think you're very clever! Your mark cannot be a space."
-    (> (count input-marker) 1)
-      (str (invalid-mark input-marker) "Markers must be a single letter.")
-    (not (re-matches #"^[a-zA-Z]$" input-marker))
-      (str (invalid-mark input-marker) "You must choose a letter.")
-    (= input-marker opponent-marker)
-      (str (invalid-mark input-marker) "Your opponent already chose that marker.")
-    :else "Your marker choice is invalid."))
+(defn invalid-mark-too-long [marker]
+  (str (invalid-mark marker) "Markers must be a single letter."))
+
+(defn invalid-mark-special-char [marker]
+  (str (invalid-mark marker) "You must choose a letter."))
+
+(defn invalid-mark-already-taken [marker]
+  (str (invalid-mark marker) "Your opponent already chose that marker."))

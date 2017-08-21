@@ -8,7 +8,8 @@
 (def num-spaces (* board-dimension board-dimension))
 
 (defn new-board []
-  (into (sorted-map) (for [space (range num-spaces) value [empty-space]] [space value])))
+  (into (sorted-map)
+  (for [space (range num-spaces) value [empty-space]] [space value])))
 
 (defn marked? [board space]
   (not (= (get board space) empty-space)))
@@ -25,8 +26,20 @@
 (defn space-exists? [space]
   (and (<= 0 space) (< space num-spaces)))
 
+(defn to-indexed-vec [board]
+  (vec (interleave board)))
+
+(defn render-space [[index marker]]
+  (if (= marker empty-space)
+      (str " " index " ")
+      (str " " marker " ")))
+
+(defn to-string-list [board]
+  (let [board-vector (to-indexed-vec board)]
+    (map render-space board-vector)))
+
 (defn rows [board]
-  (into [] (partition 3 (vals board))))
+  (into [] (partition board-dimension (vals board))))
 
 (defn columns [board]
   (apply mapv vector (rows board)))
@@ -51,15 +64,15 @@
         diagonals (diagonals board)]
     (into [] (concat rows columns diagonals))))
 
-; todo: figure out what is the most efficient and cleanest
-; way to check if there is a winner
-(defn- find-first
-         [f collection]
-         (first (filter f collection)))
+; eventually might want to move all of the following to another namespace
+(defn- find-first [f collection]
+  (first (filter f collection)))
 
-; move this to another namespace (might be useful when returning winner)
 (defn winning-row [board]
   (find-first in-a-row? (all-rows board)))
+
+(defn get-winner [board]
+  (first (winning-row board)))
 
 (defn has-winner? [board]
   (let [rows (all-rows board)

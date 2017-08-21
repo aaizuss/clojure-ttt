@@ -8,7 +8,6 @@
     true
   (catch Exception e false)))
 
-; might be better to put a variation of this in board ns
 (defn valid-board-position? [board space]
   (and (is-num? space)
        (board/space-exists? (utils/to-num space))))

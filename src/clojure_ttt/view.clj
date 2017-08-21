@@ -5,15 +5,21 @@
             [clojure-ttt.utilities :as utils]))
 
 ; is this silly?
-; (defn show-board [board]
-;   (io/show (renderer/render-board board)))
+(defn show-board [board]
+  (io/show (renderer/render-board board)))
 
-; (def show-welcome []
-;   (io/show renderer/welcome))
+(defn show-welcome []
+  (io/show renderer/welcome))
 
-; (defn show-start-screen
-;   (show-welcome)
-;   (show-board [board/new-board]))
+(defn invalid-marker-msg [input-marker opponent-marker]
+  (cond
+    (> (count input-marker) 1)
+      (renderer/invalid-mark-too-long input-marker)
+    (not (re-matches #"^[a-zA-Z]$" input-marker))
+      (renderer/invalid-mark-special-char input-marker)
+    (= input-marker opponent-marker)
+      (renderer/invalid-mark-already-taken input-marker)
+    :else "Your marker choice is invalid."))
 
 (defn get-marker
   [& {:keys [order-num opponent-marker] :or {order-num 1 opponent-marker ""}}]
@@ -21,7 +27,7 @@
       (if (validator/valid-marker? marker opponent-marker)
            marker
            (do
-             (renderer/invalid-marker-msg marker opponent-marker)
+             (io/show (invalid-marker-msg marker opponent-marker))
              (recur {:order-num order-num :opponent-marker opponent-marker})))))
 
 (defn get-move [board]
@@ -29,5 +35,5 @@
     (if (validator/valid-move? board move)
         (utils/to-num move)
         (do
-          renderer/invalid-move
+          (io/show renderer/invalid-move)
           (recur board)))))
