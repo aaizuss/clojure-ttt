@@ -36,5 +36,5 @@
              :opponent current-player}))))
 
 (defn play []
-  (view/show-welcome)
+  (io/show renderer/welcome)
   (game-loop (setup-game)))

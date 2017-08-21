@@ -4,13 +4,6 @@
             [clojure-ttt.validator :as validator]
             [clojure-ttt.utilities :as utils]))
 
-; is this silly?
-(defn show-board [board]
-  (io/show (renderer/render-board board)))
-
-(defn show-welcome []
-  (io/show renderer/welcome))
-
 (defn invalid-marker-msg [input-marker opponent-marker]
   (cond
     (> (count input-marker) 1)
