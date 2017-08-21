@@ -56,9 +56,6 @@
 (defn turn-message [marker]
   (str "It is " marker "'s turn."))
 
-(defn invalid-mark-space [marker]
-  "You must think you're very clever! Your mark cannot be a space.")
-
 (defn invalid-mark-too-long [marker]
   (str (invalid-mark marker) "Markers must be a single letter."))
 
@@ -67,15 +64,3 @@
 
 (defn invalid-mark-already-taken [marker]
   (str (invalid-mark marker) "Your opponent already chose that marker."))
-
-(defn invalid-marker-msg [input-marker opponent-marker]
-  (cond
-    (= input-marker " ")
-      (invalid-mark-space input-marker)
-    (> (count input-marker) 1)
-      (invalid-mark-too-long input-marker)
-    (not (re-matches #"^[a-zA-Z]$" input-marker))
-      (invalid-mark-special-char input-marker)
-    (= input-marker opponent-marker)
-      (invalid-mark-already-taken input-marker)
-    :else "Your marker choice is invalid."))

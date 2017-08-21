@@ -11,13 +11,23 @@
 (defn show-welcome []
   (io/show renderer/welcome))
 
+(defn invalid-marker-msg [input-marker opponent-marker]
+  (cond
+    (> (count input-marker) 1)
+      (renderer/invalid-mark-too-long input-marker)
+    (not (re-matches #"^[a-zA-Z]$" input-marker))
+      (renderer/invalid-mark-special-char input-marker)
+    (= input-marker opponent-marker)
+      (renderer/invalid-mark-already-taken input-marker)
+    :else "Your marker choice is invalid."))
+
 (defn get-marker
   [& {:keys [order-num opponent-marker] :or {order-num 1 opponent-marker ""}}]
     (let [marker (io/prompt (renderer/marker-selection order-num))]
       (if (validator/valid-marker? marker opponent-marker)
            marker
            (do
-             (io/show (renderer/invalid-marker-msg marker opponent-marker))
+             (io/show (invalid-marker-msg marker opponent-marker))
              (recur {:order-num order-num :opponent-marker opponent-marker})))))
 
 (defn get-move [board]

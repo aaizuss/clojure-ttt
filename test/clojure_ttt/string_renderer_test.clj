@@ -34,16 +34,16 @@
     (is (= "Player 2, enter a single letter for your mark: "
             (marker-selection 2)))))
 
-(deftest invalid-marker-msg-test
-  (testing "must be single letter"
-    (is (= "www is an invalid mark. Markers must be a single letter."
-            (invalid-marker-msg "www" ""))))
-  (testing "does not accept special characters"
-    (is (= "* is an invalid mark. You must choose a letter."
-            (invalid-marker-msg "*" ""))))
-  (testing "does not accept space"
-    (is (= "You must think you're very clever! Your mark cannot be a space."
-            (invalid-marker-msg " " ""))))
-  (testing "does not accept marker that is the same as opponent"
-    (is (= "A is an invalid mark. Your opponent already chose that marker."
-            (invalid-marker-msg "A" "A")))))
+; (deftest invalid-marker-msg-test
+;   (testing "must be single letter"
+;     (is (= "www is an invalid mark. Markers must be a single letter."
+;             (invalid-marker-msg "www" ""))))
+;   (testing "does not accept special characters"
+;     (is (= "* is an invalid mark. You must choose a letter."
+;             (invalid-marker-msg "*" ""))))
+;   (testing "does not accept space"
+;     (is (= "You must think you're very clever! Your mark cannot be a space."
+;             (invalid-marker-msg " " ""))))
+;   (testing "does not accept marker that is the same as opponent"
+;     (is (= "A is an invalid mark. Your opponent already chose that marker."
+;             (invalid-marker-msg "A" "A")))))

@@ -6,6 +6,17 @@
 (def blank-board (board/new-board))
 (def marked-board (board/mark-space blank-board 6 "x"))
 
+(deftest invalid-marker-msg-test
+  (testing "must be single letter"
+    (is (= "www is an invalid mark. Markers must be a single letter."
+            (invalid-marker-msg "www" ""))))
+  (testing "does not accept special characters"
+    (is (= "* is an invalid mark. You must choose a letter."
+            (invalid-marker-msg "*" ""))))
+  (testing "does not accept marker that is the same as opponent"
+    (is (= "A is an invalid mark. Your opponent already chose that marker."
+            (invalid-marker-msg "A" "A")))))
+
 ; i need to figure out how to prevent
 ; the tests from printing
 (deftest get-marker-test
