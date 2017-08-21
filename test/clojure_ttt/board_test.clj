@@ -162,3 +162,11 @@
     (is (= false (tie? marked-board))))
   (testing "false when there is a winner"
     (is (= false (tie? col-2-winner)))))
+
+(deftest game-over-test
+  (testing "true when there is a tie"
+    (is (= true (game-over? tied-board))))
+  (testing "false when game is ongoing"
+    (is (= false (game-over? marked-board))))
+  (testing "true when there is a winner"
+    (is (= true (game-over? col-2-winner)))))

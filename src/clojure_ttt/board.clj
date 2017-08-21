@@ -81,3 +81,6 @@
 
 (defn tie? [board]
   (and (full? board) (not (has-winner? board))))
+
+(defn game-over? [board]
+  (or (has-winner? board) (tie? board)))
