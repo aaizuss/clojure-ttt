@@ -25,9 +25,10 @@
       (wrap-newline (apply str parts))))
 
 (def welcome
-  (str "|----------------------------|\n"
-       "|-- Welcome to Tic Tac Toe --|\n"
-       "|----------------------------|"))
+  (wrap-newline
+    (str "|----------------------------|\n"
+         "|-- Welcome to Tic Tac Toe --|\n"
+         "|----------------------------|")))
 
 (defn win-message [winning-mark]
   (str winning-mark " wins!"))
