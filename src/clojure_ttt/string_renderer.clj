@@ -10,7 +10,7 @@
 
 (defn render-board [board]
   (let [pieces (row-strings board)]
-    (apply str (flatten pieces))))
+    (wrap-newline (apply str (flatten pieces)))))
 
 (defn row-strings [board]
   (let [board-string-list (board/to-string-list board)

@@ -27,7 +27,7 @@
 (deftest render-board-test
   (testing "renders the board as a string (with artistic flair)"
     (is (= (render-board diagonal-winner)
-            " x | 1 | 2 \n--- --- --- \n 3 | x | 5 \n--- --- --- \n 6 | 7 | x "))))
+            (wrap-newline " x | 1 | 2 \n--- --- --- \n 3 | x | 5 \n--- --- --- \n 6 | 7 | x ")))))
 
 (deftest marker-selection-test
   (testing "renders the message for player 2"
