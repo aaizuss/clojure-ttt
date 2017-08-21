@@ -17,20 +17,19 @@
   (io/show (renderer/render-board board))
   (io/show (renderer/turn-message current-player)))
 
+(defn show-game-over [board current-player]
+  (io/show (renderer/render-board board))
+  (if (board/tie? board)
+      (io/show (renderer/tie-message))
+      (let [winner (board/get-winner board)]
+        (io/show (renderer/win-message current-player)))))
+
 (defn game-loop [{:keys [board current-player opponent]}]
   (show-board-before-move board current-player)
   (let [move (view/get-move board)
         marked-board (board/mark-space board move current-player)]
-    (cond
-      (board/has-winner? marked-board)
-        (do
-          (io/show (renderer/render-board marked-board))
-          (io/show (renderer/win-message current-player)))
-      (board/tie? marked-board)
-        (do
-          (io/show (renderer/render-board marked-board))
-          (io/show (renderer/tie-message)))
-      :else
+      (if (board/game-over? marked-board)
+          (show-game-over marked-board current-player)
           (recur
             {:board marked-board
              :current-player opponent

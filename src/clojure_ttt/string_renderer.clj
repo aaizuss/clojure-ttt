@@ -3,8 +3,6 @@
             [clojure-ttt.board :as board]
             [clojure.data.json :as json]))
 
-; TODO: put strings in a config file, read it in
-
 (defn read-json-file
   ([directory filename] (slurp (str directory "/" filename)))
   ([filename] (read-json-file "." filename)))
