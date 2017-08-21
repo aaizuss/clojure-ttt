@@ -66,9 +66,8 @@
 
 ; todo: figure out what is the most efficient and cleanest
 ; way to check if there is a winner
-(defn- find-first
-         [f collection]
-         (first (filter f collection)))
+(defn- find-first [f collection]
+  (first (filter f collection)))
 
 ; move this to another namespace? (might be useful when returning winner)
 (defn winning-row [board]
