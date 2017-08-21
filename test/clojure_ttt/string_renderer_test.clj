@@ -9,6 +9,10 @@
      3 :_ 4 "x" 5 :_
      6 :_ 7 :_ 8 "x"}))
 
+(deftest win-message-test
+  (testing "customizes message for marker"
+    (is (= "X wins!" (win-message "X")))))
+
 (deftest row-divider-test
   (testing "returns row-divider"
     (is (=

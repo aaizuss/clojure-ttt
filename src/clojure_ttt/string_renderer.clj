@@ -1,8 +1,20 @@
 (ns clojure-ttt.string-renderer
   (:require [clojure.string :as string]
-            [clojure-ttt.board :as board]))
+            [clojure-ttt.board :as board]
+            [clojure.data.json :as json]))
 
 ; TODO: put strings in a config file, read it in
+
+(defn read-json-file
+  ([directory filename] (slurp (str directory "/" filename)))
+  ([filename] (read-json-file "." filename)))
+
+(defn map-from-json-string [json-string]
+  (json/read-str json-string :key-fn keyword))
+
+(def string-map
+  (let [json-string (read-json-file "string-config.json")]
+    (map-from-json-string json-string)))
 
 (declare row-divider row-strings)
 (defn wrap-newline [s]
@@ -25,42 +37,32 @@
       (wrap-newline (apply str parts))))
 
 (def welcome
-  (wrap-newline
-    (str "|----------------------------|\n"
-         "|-- Welcome to Tic Tac Toe --|\n"
-         "|----------------------------|")))
+  (wrap-newline (:welcome-msg string-map)))
 
 (defn win-message [winning-mark]
-  (str winning-mark " wins!"))
+  (str winning-mark (:win-msg string-map)))
 
 (defn tie-message []
-  (str "Tie Game!"))
+  (:tie-msg string-map))
 
 (defn marker-selection [order]
-  (str "Player " order ", enter a single letter for your mark: "))
+  (str "Player " order ", " (:marker-selection-msg string-map)))
 
-(def choose-space "Enter a number 0-8 to make a move: ")
+(def choose-space (:choose-space-msg string-map))
 
 (defn invalid-mark [mark]
-  (str mark " is an invalid mark. "))
+  (str mark (:invalid-mark-msg string-map)))
 
-(def invalid-move
-  "You can't move there.")
-
-(defn taken-space [space]
-  (str "You can't move to " space ". It's taken! "))
-
-(defn not-a-number [space]
-  (str "You can't move to " space ". It's not on the board!"))
+(def invalid-move (:invalid-move-msg string-map))
 
 (defn turn-message [marker]
   (str "It is " marker "'s turn."))
 
 (defn invalid-mark-too-long [marker]
-  (str (invalid-mark marker) "Markers must be a single letter."))
+  (str (invalid-mark marker) (:invalid-mark-too-long string-map)))
 
 (defn invalid-mark-special-char [marker]
-  (str (invalid-mark marker) "You must choose a letter."))
+  (str (invalid-mark marker) (:invalid-mark-special-char string-map)))
 
 (defn invalid-mark-already-taken [marker]
-  (str (invalid-mark marker) "Your opponent already chose that marker."))
+  (str (invalid-mark marker) (:invalid-mark-already-taken string-map)))

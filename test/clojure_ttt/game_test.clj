@@ -21,7 +21,7 @@
   (str "\n x | 1 | o \n--- --- --- \n "
        "3 | o | 5 \n--- --- --- \n "
        "6 | x | x \n\n" "It is o's turn.\n"
-       "Enter a number 0-8 to make a move: "
+       "Enter a number 0-8 to mark that position on the board: "
        "\n\n x | 1 | o "
        "\n--- --- --- \n "
        "3 | o | 5 "
