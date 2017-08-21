@@ -18,16 +18,15 @@
     6 :_ 7 "x" 8 "x"}))
 
 (def before-win-message
-  (str "It is o's turn.\n "
-       "x | 1 | o \n--- --- --- \n "
+  (str "\n x | 1 | o \n--- --- --- \n "
        "3 | o | 5 \n--- --- --- \n "
-       "6 | x | x \n"
+       "6 | x | x \n\n" "It is o's turn.\n"
        "Enter a number 0-8 to make a move: "
-       "\n x | 1 | o "
+       "\n\n x | 1 | o "
        "\n--- --- --- \n "
        "3 | o | 5 "
        "\n--- --- --- \n "
-       "o | x | x \n"))
+       "o | x | x \n\n"))
 
 (deftest setup-players-test
   (testing "returns a map with current-player and opponent"

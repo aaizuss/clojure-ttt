@@ -14,8 +14,8 @@
   (assoc players :board (board/new-board))))
 
 (defn show-board-before-move [board current-player]
-  (io/show (renderer/turn-message current-player))
-  (io/show (renderer/render-board board)))
+  (io/show (renderer/render-board board))
+  (io/show (renderer/turn-message current-player)))
 
 (defn game-loop [{:keys [board current-player opponent]}]
   (show-board-before-move board current-player)
