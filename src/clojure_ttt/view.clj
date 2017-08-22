@@ -12,7 +12,7 @@
       (renderer/invalid-mark-special-char input-marker)
     (= input-marker opponent-marker)
       (renderer/invalid-mark-already-taken input-marker)
-    :else "Your marker choice is invalid."))
+    :else (renderer/invalid-mark input-marker)))
 
 (defn get-marker
   [& {:keys [order-num opponent-marker] :or {order-num 1 opponent-marker ""}}]
