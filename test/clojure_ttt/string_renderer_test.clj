@@ -35,5 +35,5 @@
 
 (deftest marker-selection-test
   (testing "renders the message for player 2"
-    (is (= "Player 2, enter a single letter for your mark: "
+    (is (= "Choose a single letter for Player 2's mark:"
             (marker-selection 2)))))

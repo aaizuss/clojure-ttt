@@ -44,7 +44,7 @@
   (:tie-msg string-map))
 
 (defn marker-selection [order]
-  (str "Player " order ", " (:marker-selection-msg string-map)))
+  (str (:marker-selection-msg string-map) order "'s mark:"))
 
 (def choose-space (:choose-space-msg string-map))
 
@@ -64,3 +64,8 @@
 
 (defn invalid-mark-already-taken [marker]
   (str (invalid-mark marker) (:invalid-mark-already-taken string-map)))
+
+(def game-selection-msg
+  (wrap-newline (:game-selection-msg string-map)))
+
+(def invalid-choice-msg (:invalid-choice-msg string-map))
