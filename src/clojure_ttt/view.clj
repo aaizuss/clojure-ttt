@@ -30,3 +30,11 @@
         (do
           (io/show renderer/invalid-move)
           (recur board)))))
+
+(defn get-game-selection [game-options]
+  (let [selection (io/prompt renderer/game-selection-msg)]
+    (if (validator/valid-game-selection? selection game-options)
+        ((keyword selection) game-options)
+        (do
+          (io/show renderer/invalid-choice-msg)
+          (recur game-options)))))

@@ -5,6 +5,7 @@
 
 (def blank-board (board/new-board))
 (def marked-board (board/mark-space blank-board 6 "x"))
+(def game-options {:1 :human-v-human :2 :human-v-cpu :3 :cpu-v-human})
 
 (deftest invalid-marker-msg-test
   (testing "must be single letter"
@@ -41,3 +42,8 @@
   (testing "continues asking for a marker if space is taken"
     (is (= 0
         (with-in-str "6\n0" (get-move marked-board))))))
+
+(deftest get-game-selection-test
+  (testing "valid input returns the game selection"
+    (is (= :human-v-cpu
+        (with-in-str "2" (get-game-selection game-options))))))
