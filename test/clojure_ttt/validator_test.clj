@@ -11,6 +11,9 @@
      3 :_ 4 "o" 5 :_
      6 :_ 7 :_ 8 "x"}))
 
+(def game-options
+  {:1 "" :2 "" :3 ""})
+
 (deftest is-num-test
   (testing "false if not a number"
     (is (= false (is-num? "a"))))
@@ -44,3 +47,9 @@
     (is (= false (valid-marker? "\n" "o"))))
   (testing "false if same as opponent"
     (is (= false (valid-marker? "x" "x")))))
+
+(deftest valid-game-selection-test
+  (testing "1 is valid"
+    (is (= true (valid-game-selection? "1" game-options))))
+  (testing "9 is invalid"
+    (is (= false (valid-game-selection? "9" game-options)))))

@@ -21,3 +21,6 @@
   (and (= 1 (count input-mark))
        (= 1 (count (re-matches #"^[a-zA-Z]$" input-mark)))
        (not (= input-mark opponent-mark))))
+
+(defn valid-game-selection? [input game-options]
+  (= true (some #(= input %) (map name (keys game-options)))))
