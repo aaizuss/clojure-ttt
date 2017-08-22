@@ -1,13 +1,17 @@
 (ns clojure-ttt.string-renderer-test
   (:require [clojure.test :refer :all]
             [clojure-ttt.string-renderer :refer :all]
-            [clojure-ttt.board :as board]))
+            [clojure-ttt.board :as board]
+            [clojure-ttt.player :as player]))
 
 (def diagonal-winner
   (into (sorted-map)
     {0 "x" 1 :_ 2 :_
      3 :_ 4 "x" 5 :_
      6 :_ 7 :_ 8 "x"}))
+
+(def sample-human
+ (player/create-player "X" true true))
 
 (deftest win-message-test
   (testing "customizes message for marker"
@@ -37,3 +41,7 @@
   (testing "renders the message for player 2"
     (is (= "Choose a single letter for Player 2's mark:"
             (marker-selection 2)))))
+
+(deftest turn-message-test
+  (testing "renders turn message for a given player"
+    (is (= "It is X's turn." (turn-message sample-human)))))

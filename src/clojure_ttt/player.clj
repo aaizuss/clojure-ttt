@@ -23,3 +23,6 @@
 
 (defn goes-first? [player]
   (:goes-first player))
+
+(defn get-marker [player]
+  (:marker player))

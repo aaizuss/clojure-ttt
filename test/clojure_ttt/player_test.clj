@@ -29,3 +29,7 @@
     (is (= true (goes-first? sample-human))))
   (testing "returns false when player does not go first"
     (is (= false (goes-first? sample-computer)))))
+
+(deftest get-marker-test
+  (testing "returns the player's marker"
+    (is (= "x" (get-marker sample-human)))))
