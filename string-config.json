@@ -12,6 +12,6 @@
   "invalid-mark-too-long": "Markers must be a single letter.",
   "invalid-mark-special-char": "You must choose a letter.",
   "invalid-mark-already-taken": "Your opponent already chose that marker.",
-  "game-selection-msg": "Enter a number to select a game type.\n         P1            P2\n|-----------------------------------|\n  - [1] Human     vs  Human\n  - [2] Human     vs  Computer\n  - [3] Computer  vs  Human\n",
+  "game-selection-msg": "Enter a number to select a game type.\n\n       P1            P2\n------------------------------\n[1]  Human     vs   Human\n[2]  Human     vs   Computer\n[3]  Computer  vs   Human",
   "invalid-choice-msg": "Your choice is invalid."
 }
