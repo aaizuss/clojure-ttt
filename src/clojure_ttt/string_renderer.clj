@@ -1,8 +1,7 @@
 (ns clojure-ttt.string-renderer
   (:require [clojure.string :as string]
             [clojure-ttt.board :as board]
-            [clojure.data.json :as json]
-            [clojure-ttt.player :as player]))
+            [clojure.data.json :as json]))
 
 (defn read-json-file
   ([directory filename] (slurp (str directory "/" filename)))
@@ -54,8 +53,8 @@
 
 (def invalid-move (:invalid-move-msg string-map))
 
-(defn turn-message [player]
-  (str "It is " (player/get-marker player) "'s turn."))
+(defn turn-message [mark]
+  (str "It is " mark "'s turn."))
 
 (defn invalid-mark-too-long [marker]
   (str (invalid-mark marker) (:invalid-mark-too-long string-map)))
