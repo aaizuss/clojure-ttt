@@ -1,6 +1,7 @@
 (ns clojure-ttt.game-test
   (:require [clojure.test :refer :all]
             [clojure-ttt.game :refer :all]
+            [clojure-ttt.player :as player]
             [clojure-ttt.board :as board]))
 
 (def blank-board (board/new-board))
@@ -28,17 +29,49 @@
        "\n--- --- --- \n "
        "o | x | x \n\n"))
 
+(def sample-human-p1
+  {:marker "x" :human true :goes-first true})
+
+(def sample-human-o
+  {:marker "o" :human true :goes-first false})
+
+(def sample-computer-p2
+  {:marker "o" :human false :goes-first false})
+
+(def sample-human-p2
+  {:marker "x" :human true :goes-first false})
+
+(def sample-computer-p1
+  {:marker "o" :human false :goes-first true})
+
+(deftest stub-players-test
+  (testing "stubs players for human v computer"
+    (is (= {:current-player {:marker "" :human true :goes-first true}
+            :opponent {:marker "" :human false :goes-first false}}
+            (stub-players :human-v-cpu)))))
+
+
 (deftest setup-players-test
-  (testing "returns a map with current-player and opponent"
+  (testing "returns players map for human v computer game"
     (let [player-map
-        (with-in-str "x\no" (setup-players))]
-      (is (= "x" (:current-player player-map)))
-      (is (= "o" (:opponent player-map))))))
+        (with-in-str "2\nx\no" (setup-players game-options))]
+      (is (= sample-human-p1 (:current-player player-map)))
+      (is (= sample-computer-p2 (:opponent player-map)))))
+  (testing "returns players map for computer v human game"
+    (let [player-map
+        (with-in-str "3\no\nx" (setup-players game-options))]
+      (is (= sample-computer-p1 (:current-player player-map)))
+      (is (= sample-human-p2 (:opponent player-map)))))
+  (testing "returns players map for human v human game"
+    (let [player-map
+        (with-in-str "1\nx\no" (setup-players game-options))]
+      (is (= sample-human-p1 (:current-player player-map)))
+      (is (= sample-human-o (:opponent player-map))))))
 
 (deftest game-loop-test
   (testing "halts when o wins and displays message that o wins"
     (is (= (str before-win-message "o wins!\n")
         (with-out-str (with-in-str "6" (game-loop
                                           {:board o-close-to-win
-                                            :current-player "o"
-                                            :opponent "x"})))))))
+                                            :current-player sample-human-o
+                                            :opponent sample-human-p1})))))))
