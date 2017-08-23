@@ -29,6 +29,11 @@
         player2 (assoc (:opponent incomplete-players) :marker p2-marker)]
       {:current-player player1 :opponent player2}))
 
+(defn swap-player-order [players]
+  (let [p1 (:current-player players)
+        p2 (:opponent players)]
+      {:current-player p2 :opponent p1}))
+
 (defn setup-game [game-options]
   (let [players (setup-players game-options)]
     (assoc players :board (board/new-board))))
@@ -36,6 +41,16 @@
 (defn show-board-before-move [board current-player]
   (io/show (renderer/render-board board))
   (io/show (renderer/turn-message (player/get-marker current-player))))
+
+(defn winning-player-from-marker [board players]
+  (let [winner (board/get-winner board)
+        p1 (:current-player players)
+        p2 (:opponent players)]
+      (if (= winner (player/get-marker p1)) p1 p2)))
+
+(defn is-winner? [board player]
+  (let [winner (board/get-winner board)]
+      (= winner (player/get-marker player))))
 
 ; want to edit this so the message is special depending on game type
 (defn show-game-over [board]

@@ -18,6 +18,12 @@
     3 :_ 4 "o" 5 :_
     6 :_ 7 "x" 8 "x"}))
 
+(def o-wins-board
+ (into (sorted-map)
+   {0 "x" 1 :_  2 "o"
+    3 :_  4 "o" 5 :_
+    6 "o" 7 "x" 8 "x"}))
+
 (def before-win-message
   (str "\n x | 1 | o \n--- --- --- \n "
        "3 | o | 5 \n--- --- --- \n "
@@ -43,6 +49,14 @@
 
 (def sample-computer-p1
   {:marker "o" :human false :goes-first true})
+
+(def sample-human-v-computer
+  {:current-player sample-human-p1
+   :opponent sample-computer-p2})
+
+(def sample-computer-v-human
+  {:current-player sample-computer-p2
+   :opponent sample-human-p1})
 
 (deftest stub-players-test
   (testing "stubs players for human v computer"
@@ -75,3 +89,12 @@
                                           {:board o-close-to-win
                                             :current-player sample-human-o
                                             :opponent sample-human-p1})))))))
+
+
+(deftest swap-player-order-test
+  (testing "swaps the player order"
+    (is (= sample-computer-p2 (winning-player-from-marker o-wins-board sample-human-v-computer)))))
+
+(deftest winning-player-from-marker-test
+  (testing "returns the player corresponding to the winning marker"
+    (is (= sample-computer-v-human (swap-player-order sample-human-v-computer)))))
