@@ -70,3 +70,7 @@
   (wrap-newline (:game-selection-msg string-map)))
 
 (def invalid-choice-msg (:invalid-choice-msg string-map))
+
+(defn move-history-msg
+  ([marker space]
+    (str marker (:move-history-msg string-map) space)))

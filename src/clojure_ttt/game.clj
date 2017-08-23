@@ -19,7 +19,8 @@
     (= :cpu-v-human game-type)
       {:current-player (player/stub-computer-first)
        :opponent (player/stub-human-second)}
-    :else "if this happens it means amanda named something wrong")) ; raise exception here?
+    ; raise exception here?
+    :else "this can't happen unless game-options names don't match"))
 
 (defn setup-players [game-options]
   (let [game-type (view/get-game-selection game-options)
@@ -33,22 +34,15 @@
 (defn player-markers [current-player opponent]
   [(player/get-marker current-player) (player/get-marker opponent)])
 
-(defn swap-player-order [players]
-  (let [p1 (:current-player players)
-        p2 (:opponent players)]
-      {:current-player p2 :opponent p1}))
-
 (defn setup-game [game-options]
   (let [players (setup-players game-options)]
     (assoc players :board (board/new-board))))
 
-(defn show-board-before-move [board current-player]
+(defn show-pre-move-info [board current-player opponent past-move]
   (io/show (renderer/render-board board))
+  (if (not= -1 past-move)
+    (io/show (renderer/move-history-msg (player/get-marker opponent) past-move)))
   (io/show (renderer/turn-message (player/get-marker current-player))))
-
-(defn is-winner? [board player]
-  (let [winner (board/get-winner board)]
-      (= winner (player/get-marker player))))
 
 ; want to edit this so the message is special depending on game type
 (defn show-game-over [board]
@@ -65,8 +59,8 @@
         (view/get-move board)
         (ai/get-ai-move current-player-marker board player-markers))))
 
-(defn game-loop [{:keys [board current-player opponent]}]
-  (show-board-before-move board current-player)
+(defn game-loop [{:keys [board current-player opponent prev-move] :or {prev-move -1}}]
+  (show-pre-move-info board current-player opponent prev-move)
   (let [current-player-marker (player/get-marker current-player)
         opponent-marker (player/get-marker opponent)
         move (get-player-move current-player opponent board)
@@ -76,7 +70,8 @@
           (recur
             {:board marked-board
              :current-player opponent
-             :opponent current-player}))))
+             :opponent current-player
+             :prev-move move}))))
 
 (defn play []
   (io/show renderer/welcome)

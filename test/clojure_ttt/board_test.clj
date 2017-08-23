@@ -23,12 +23,6 @@
     3 :_ 4 :_ 5 :_
     6 :_ 7 :_ 8 :_}))
 
-(def row-2-winner
- (into (sorted-map)
-   {0 :_ 1 :_ 2 :_
-    3 "o" 4 "o" 5 "o"
-    6 :_ 7 :_ 8 :_}))
-
 (def col-2-winner
  (into (sorted-map)
    {0 :_ 1 :_ 2 "o"
