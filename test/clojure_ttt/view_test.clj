@@ -18,8 +18,6 @@
     (is (= "A is an invalid mark. Your opponent already chose that marker."
             (invalid-marker-msg "A" "A")))))
 
-; i need to figure out how to prevent
-; the tests from printing
 (deftest get-marker-test
   (testing "returns a valid mark"
     (is (= "x"

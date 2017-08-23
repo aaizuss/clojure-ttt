@@ -3,20 +3,21 @@
             [clojure-ttt.board :as board]
             [clojure.data.json :as json]))
 
-(defn read-json-file
+(defn- read-json-file
   ([directory filename] (slurp (str directory "/" filename)))
   ([filename] (read-json-file "." filename)))
 
-(defn map-from-json-string [json-string]
+(defn- map-from-json-string [json-string]
   (json/read-str json-string :key-fn keyword))
 
 (def string-map
   (let [json-string (read-json-file "string-config.json")]
     (map-from-json-string json-string)))
 
-(declare row-divider row-strings)
 (defn wrap-newline [s]
   (str "\n" s "\n"))
+
+(declare row-divider row-strings)
 
 (defn render-board [board]
   (let [pieces (row-strings board)]
@@ -51,7 +52,7 @@
 (defn invalid-mark [mark]
   (str mark (:invalid-mark-msg string-map)))
 
-(def invalid-move (:invalid-move-msg string-map))
+(def invalid-move-msg (:invalid-move-msg string-map))
 
 (defn turn-message [mark]
   (str "It is " mark "'s turn."))
@@ -69,3 +70,7 @@
   (wrap-newline (:game-selection-msg string-map)))
 
 (def invalid-choice-msg (:invalid-choice-msg string-map))
+
+(defn move-history-msg
+  ([marker space]
+    (str marker (:move-history-msg string-map) space)))

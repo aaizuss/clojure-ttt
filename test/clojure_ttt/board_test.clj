@@ -23,12 +23,6 @@
     3 :_ 4 :_ 5 :_
     6 :_ 7 :_ 8 :_}))
 
-(def row-2-winner
- (into (sorted-map)
-   {0 :_ 1 :_ 2 :_
-    3 "o" 4 "o" 5 "o"
-    6 :_ 7 :_ 8 :_}))
-
 (def col-2-winner
  (into (sorted-map)
    {0 :_ 1 :_ 2 "o"
@@ -83,6 +77,43 @@
   (testing "9 does not exist on the board"
     (is (= false (space-exists? 9)))))
 
+(deftest rows-test
+  (testing "returns marks on board partitioned as rows"
+    (is (=
+      [["x" "x" "x"] [:_ :_ :_] [:_ :_ :_]]
+      (rows row-0-winner)))))
+
+(deftest columns-test
+  (testing "returns marks along board columns [[col 0] [col 1] [col 2]]"
+    (is (=
+       [[:_ :_ :_]
+        [:_ :_ :_]
+        ["o" "o" "o"]]
+      (columns col-2-winner)))))
+
+(deftest diagonals-test
+  (testing "returns marks along board diagonals [[top left diag] [top right]]"
+    (is (= [["x" "x" "x"]
+            [:_ "x" :_]]
+      (diagonals diag-0-winner)))))
+
+(deftest in-a-row-test
+  (testing "given a row (collection of values from board ie a single diagonal),
+  returns true when the values are the same mark"
+    (let [row (get (diagonals diag-0-winner) 0)]
+      (is (= true (in-a-row? row)))))
+  (testing "returns false for an empty row"
+    (let [row '(:_ :_ :_)]
+      (is (= false (in-a-row? row))))))
+
+(deftest all-rows-test
+  (testing "returns a collection of rows (diag/col/row) from the board
+  eg: [[row 0] [row 1] [row 2][diag 0] [diag 1]...]"
+    (is (= (all-rows row-0-winner)
+      [["x" "x" "x"] [:_ :_ :_] [:_ :_ :_]
+      ["x" :_ :_] ["x" :_ :_] ["x" :_ :_]
+      ["x" :_ :_] ["x" :_ :_]]))))
+
 (deftest to-indexed-vec-test
   (testing "converts board structure to an indexed vector"
     (is (= [[0 :_] [1 :_] [2 :_]
@@ -101,43 +132,6 @@
 (deftest to-string-list-test
   (testing "converts the board to a list of strings"
     (is (= '(" x " " 1 " " 2 " " 3 " " x " " 5 " " 6 " " 7 " " x ") (to-string-list diag-0-winner)))))
-
-(deftest rows-test
-  (testing "returns board partitioned as rows"
-    (is (=
-      [["x" "x" "x"] [:_ :_ :_] [:_ :_ :_]]
-      (rows row-0-winner)))))
-
-(deftest columns-test
-  (testing "returns board columns [[col 0] [col 1] [col 2]]"
-    (is (=
-       [[:_ :_ :_]
-        [:_ :_ :_]
-        ["o" "o" "o"]]
-      (columns col-2-winner)))))
-
-(deftest diagonals-test
-  (testing "returns board diagonals [[top left diag] [top right]]"
-    (is (= [["x" "x" "x"]
-            [:_ "x" :_]]
-      (diagonals diag-0-winner)))))
-
-(deftest in-a-row-test
-  (testing "given a row (collection of values from board ie a single diagonal),
-  returns true when the values are the same mark"
-    (let [row (get (diagonals diag-0-winner) 0)]
-      (is (= true (in-a-row? row)))))
-  (testing "returns false for an empty row"
-    (let [row '(:_ :_ :_)]
-      (is (= false (in-a-row? row))))))
-
-(deftest all-rows-test
-  (testing "returns a collection of row (diag/col/row) from the board
-  eg: [[row 0] [row 1] [row 2][diag 0] [diag 1]...]"
-    (is (= (all-rows row-0-winner)
-      [["x" "x" "x"] [:_ :_ :_] [:_ :_ :_]
-      ["x" :_ :_] ["x" :_ :_] ["x" :_ :_]
-      ["x" :_ :_] ["x" :_ :_]]))))
 
 (deftest has-winner-test
   (testing "returns true when there is a winner on a row"

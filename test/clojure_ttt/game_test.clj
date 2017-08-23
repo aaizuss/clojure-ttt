@@ -4,8 +4,6 @@
             [clojure-ttt.player :as player]
             [clojure-ttt.board :as board]))
 
-(def blank-board (board/new-board))
-
 (def marked-board
   (into (sorted-map)
     {0 "x" 1 :_ 2 :_
@@ -17,12 +15,6 @@
    {0 "x" 1 :_ 2 "o"
     3 :_ 4 "o" 5 :_
     6 :_ 7 "x" 8 "x"}))
-
-(def o-wins-board
- (into (sorted-map)
-   {0 "x" 1 :_  2 "o"
-    3 :_  4 "o" 5 :_
-    6 "o" 7 "x" 8 "x"}))
 
 (def before-win-message
   (str "\n x | 1 | o \n--- --- --- \n "
@@ -89,8 +81,3 @@
                                           {:board o-close-to-win
                                             :current-player sample-human-o
                                             :opponent sample-human-p1})))))))
-
-
-(deftest swap-player-order-test
-  (testing "swaps the player order"
-    (is (= sample-human-v-computer (swap-player-order sample-computer-v-human)))))
