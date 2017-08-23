@@ -28,7 +28,7 @@
     (if (validator/valid-move? board move)
         (utils/to-num move)
         (do
-          (io/show renderer/invalid-move)
+          (io/show renderer/invalid-move-msg)
           (recur board)))))
 
 (defn get-game-selection [game-options]
