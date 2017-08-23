@@ -7,6 +7,7 @@
             [clojure-ttt.ai :as ai]))
 
 (def game-options {:1 :human-v-human :2 :human-v-cpu :3 :cpu-v-human})
+(def no-move -1)
 
 (defn stub-players [game-type]
   (cond
@@ -59,7 +60,7 @@
         (view/get-move board)
         (ai/get-ai-move current-player-marker board player-markers))))
 
-(defn game-loop [{:keys [board current-player opponent prev-move] :or {prev-move -1}}]
+(defn game-loop [{:keys [board current-player opponent prev-move] :or {prev-move no-move}}]
   (show-pre-move-info board current-player opponent prev-move)
   (let [current-player-marker (player/get-marker current-player)
         opponent-marker (player/get-marker opponent)
