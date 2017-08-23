@@ -9,6 +9,7 @@
      3 :_ 4 "x" 5 :_
      6 :_ 7 :_ 8 "x"}))
 
+
 (deftest win-message-test
   (testing "customizes message for marker"
     (is (= "X wins!" (win-message "X")))))
@@ -35,5 +36,9 @@
 
 (deftest marker-selection-test
   (testing "renders the message for player 2"
-    (is (= "Player 2, enter a single letter for your mark: "
+    (is (= "Choose a single letter for Player 2's mark:"
             (marker-selection 2)))))
+
+(deftest turn-message-test
+  (testing "renders turn message for a given mark"
+    (is (= "It is X's turn." (turn-message "X")))))
