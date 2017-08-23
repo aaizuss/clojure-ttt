@@ -26,18 +26,6 @@
 (defn space-exists? [space]
   (and (<= 0 space) (< space num-spaces)))
 
-(defn to-indexed-vec [board]
-  (vec (interleave board)))
-
-(defn render-space [[index marker]]
-  (if (= marker empty-space)
-      (str " " index " ")
-      (str " " marker " ")))
-
-(defn to-string-list [board]
-  (let [board-vector (to-indexed-vec board)]
-    (map render-space board-vector)))
-
 (defn rows [board]
   (into [] (partition board-dimension (vals board))))
 
@@ -64,11 +52,22 @@
         diagonals (diagonals board)]
     (into [] (concat rows columns diagonals))))
 
-; eventually might want to move all of the following to another namespace
+(defn to-indexed-vec [board]
+  (vec (interleave board)))
+
+(defn render-space [[index marker]]
+  (if (= marker empty-space)
+      (str " " index " ")
+      (str " " marker " ")))
+
+(defn to-string-list [board]
+  (let [board-vector (to-indexed-vec board)]
+    (map render-space board-vector)))
+
 (defn- find-first [f collection]
   (first (filter f collection)))
 
-(defn winning-row [board]
+(defn- winning-row [board]
   (find-first in-a-row? (all-rows board)))
 
 (defn get-winner [board]
