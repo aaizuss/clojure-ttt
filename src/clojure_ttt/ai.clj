@@ -1,52 +1,61 @@
 (ns clojure-ttt.ai
-  (:require [clojure-ttt.board :as board]
-            [clojure-ttt.game :as game]
-            [clojure-ttt.player :as player]))
+  (:require [clojure-ttt.board :as board]))
 
 (declare explore-and-score-moves)
 (def depth 0)
 
-(defn human-win? [board players]
-  (player/is-human? (game/winning-player-from-marker board players)))
+; http://neverstopbuilding.com/minimax
 
-(defn ai-win? [board players]
-  (player/is-computer? (game/winning-player-from-marker board players)))
+(defn change-turn [markers]
+  [(second markers) (first markers)])
 
-; only call this when the game is over
-(defn calculate-score [board players depth]
+(defn current-player-marker [players]
+  (first players))
+
+(defn next-player-marker [players]
+  (second players))
+
+(defn ai? [player ai-marker]
+  (= player ai-marker))
+
+(defn ai-win? [board ai-marker]
+  (= (board/get-winner board) ai-marker))
+
+(defn opponent-win? [board ai-marker]
+  (not= ai-marker (board/get-winner board)))
+
+(defn calculate-game-score [board ai-marker depth]
   (cond
-    (ai-win? board players) (- 10 depth)
-    (human-win? board players) (- depth 10)
+    (ai-win? board ai-marker) (- 10 depth)
+    (opponent-win? board ai-marker) (- depth 10)
     :else 0))
 
-; moves-and-scores looks like {space score, space score, etc}
-(defn best-move-and-score [player moves-and-scores]
-  (if (player/is-computer? player)
+(defn best-move-and-score [current-player-marker ai-marker moves-and-scores]
+  (if (ai? current-player-marker ai-marker)
       (apply max-key val moves-and-scores)
       (apply min-key val moves-and-scores)))
 
-(defn best-score [player moves-and-scores]
-  (val (best-move-and-score player moves-and-scores)))
+(defn best-score [current-player ai-marker moves-and-scores]
+  (val (best-move-and-score current-player ai-marker moves-and-scores)))
 
-(defn best-move [player moves-and-scores]
-  (key (best-move-and-score player moves-and-scores)))
+(defn best-move [current-player ai-marker moves-and-scores]
+  (key (best-move-and-score current-player ai-marker moves-and-scores)))
 
-(defn get-score [board players depth]
+(defn get-score [board ai-marker players depth]
   (if (board/game-over? board)
-      (calculate-score board players depth)
-      (best-score (:opponent players)
-        (explore-and-score-moves board (game/swap-player-order players) (inc depth)))))
+      (calculate-game-score board ai-marker depth)
+      (best-score (next-player-marker players) ai-marker
+        (explore-and-score-moves board ai-marker (change-turn players) (inc depth)))))
 
 (def speed-scoring (memoize get-score))
 
-(defn explore-and-score-moves [board players depth]
+(defn explore-and-score-moves [board ai-marker players depth]
   (let [possible-moves (board/empty-spaces board)
-        current-marker (player/get-marker (:current-player players))
-        ; iterate over moves and mark board
-        scores (map #(speed-scoring (board/mark-space board % current-marker) players depth) possible-moves)]
+        current-marker (current-player-marker players)
+        scores (map #(speed-scoring (board/mark-space board % current-marker) ai-marker players depth) possible-moves)]
     (zipmap possible-moves scores)))
 
-(defn get-ai-move [board players]
-  (let [scored-moves (explore-and-score-moves board players depth)
-        player (:current-player players)]
-    (best-move player scored-moves)))
+(defn get-ai-move [ai-marker board players]
+  (let [scored-moves (explore-and-score-moves board ai-marker players depth)
+        player (current-player-marker players)]
+    (best-move player ai-marker scored-moves)))

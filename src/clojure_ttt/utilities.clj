@@ -8,3 +8,6 @@
   (and (<= start-inc num) (< num end-exc)))
 
 (defn clean-string [str] (string/trim str))
+
+(defn random-space [empty-spaces]
+  (rand-nth empty-spaces))

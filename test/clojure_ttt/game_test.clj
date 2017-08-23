@@ -93,8 +93,4 @@
 
 (deftest swap-player-order-test
   (testing "swaps the player order"
-    (is (= sample-computer-p2 (winning-player-from-marker o-wins-board sample-human-v-computer)))))
-
-(deftest winning-player-from-marker-test
-  (testing "returns the player corresponding to the winning marker"
-    (is (= sample-computer-v-human (swap-player-order sample-human-v-computer)))))
+    (is (= sample-human-v-computer (swap-player-order sample-computer-v-human)))))

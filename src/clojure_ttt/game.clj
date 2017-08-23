@@ -3,7 +3,8 @@
             [clojure-ttt.board :as board]
             [clojure-ttt.io :as io]
             [clojure-ttt.string-renderer :as renderer]
-            [clojure-ttt.player :as player]))
+            [clojure-ttt.player :as player]
+            [clojure-ttt.ai :as ai]))
 
 (def game-options {:1 :human-v-human :2 :human-v-cpu :3 :cpu-v-human})
 
@@ -18,7 +19,7 @@
     (= :cpu-v-human game-type)
       {:current-player (player/stub-computer-first)
        :opponent (player/stub-human-second)}
-    :else "this should never happen")) ; raise exception here?
+    :else "if this happens it means amanda named something wrong")) ; raise exception here?
 
 (defn setup-players [game-options]
   (let [game-type (view/get-game-selection game-options)
@@ -28,6 +29,9 @@
         player1 (assoc (:current-player incomplete-players) :marker p1-marker)
         player2 (assoc (:opponent incomplete-players) :marker p2-marker)]
       {:current-player player1 :opponent player2}))
+
+(defn player-markers [current-player opponent]
+  [(player/get-marker current-player) (player/get-marker opponent)])
 
 (defn swap-player-order [players]
   (let [p1 (:current-player players)
@@ -42,12 +46,6 @@
   (io/show (renderer/render-board board))
   (io/show (renderer/turn-message (player/get-marker current-player))))
 
-(defn winning-player-from-marker [board players]
-  (let [winner (board/get-winner board)
-        p1 (:current-player players)
-        p2 (:opponent players)]
-      (if (= winner (player/get-marker p1)) p1 p2)))
-
 (defn is-winner? [board player]
   (let [winner (board/get-winner board)]
       (= winner (player/get-marker player))))
@@ -60,20 +58,18 @@
       (let [winner (board/get-winner board)]
         (io/show (renderer/win-message winner)))))
 
-; TODO: move this function - this is temporary until i write an ai
-(defn random-space [empty-spaces]
-  (rand-nth empty-spaces))
-
-(defn get-player-move [player board]
-  (if (player/is-human? player)
-      (view/get-move board)
-      (random-space (board/empty-spaces board)))) ;; will use minimax
+(defn get-player-move [current-player opponent board]
+  (let [player-markers (player-markers current-player opponent)
+        current-player-marker (player/get-marker current-player)]
+    (if (player/is-human? current-player)
+        (view/get-move board)
+        (ai/get-ai-move current-player-marker board player-markers))))
 
 (defn game-loop [{:keys [board current-player opponent]}]
   (show-board-before-move board current-player)
   (let [current-player-marker (player/get-marker current-player)
         opponent-marker (player/get-marker opponent)
-        move (get-player-move current-player board)
+        move (get-player-move current-player opponent board)
         marked-board (board/mark-space board move current-player-marker)]
       (if (board/game-over? marked-board)
           (show-game-over marked-board)
