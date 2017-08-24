@@ -3,6 +3,7 @@
 
 (declare explore-and-score-moves)
 (def depth 0)
+(def max-depth 5)
 
 ; http://neverstopbuilding.com/minimax
 
@@ -41,8 +42,10 @@
 (defn best-move [current-player ai-marker moves-and-scores]
   (key (best-move-and-score current-player ai-marker moves-and-scores)))
 
+; generate-boards [board space current-marker positions]
+
 (defn get-score [board ai-marker players depth]
-  (if (board/game-over? board)
+  (if (or (board/game-over? board) (> depth max-depth))
       (calculate-game-score board ai-marker depth)
       (best-score (next-player-marker players) ai-marker
         (explore-and-score-moves board ai-marker (change-turn players) (inc depth)))))

@@ -17,6 +17,13 @@
     3 "c" 4 "c" 5 :_
     6 "x" 7 :_ 8 :_}))
 
+(def c-almost-win-4x4
+ (into (sorted-map)
+   {0 "x" 1 :_ 2 :_ 3 :_
+    4 "c" 5 "c" 6 :_ 7 "c"
+    8 "x" 9 :_ 10 :_ 11 :_
+    12 :_ 13 :_ 14 :_ 15 :_}))
+
 (def markers ["c" "x"])
 
 (deftest change-turn-test
@@ -27,7 +34,9 @@
   (testing "blocks opponent from winning"
     (is (= 2 (get-ai-move "c" x-almost-win sample-players))))
   (testing "chooses winning move"
-    (is (= 5 (get-ai-move "c" c-almost-win sample-players)))))
+    (is (= 5 (get-ai-move "c" c-almost-win sample-players))))
+  (testing "chooses winning move on 4x4 board"
+    (is (= 6 (get-ai-move "c" c-almost-win-4x4 sample-players)))))
 
 ; lol
 (deftest computers-tie-test
