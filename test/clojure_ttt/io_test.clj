@@ -9,9 +9,11 @@
 ; note: not sure how to stop the test from printing the prompt
 (deftest prompt-test
   (testing "returns user input"
-    (is (= "Nothing"
+    (with-out-str
+      (is (= "Nothing"
         (with-in-str "Nothing"
-          (prompt "What's up?")))))
+          (prompt "What's up?"))))))
   (testing "returns user input without newline"
-    (is (= "5"
-        (with-in-str "5\n" (prompt "Pick a number"))))))
+    (with-out-str
+      (is (= "5"
+        (with-in-str "5\n" (prompt "Pick a number")))))))
