@@ -17,15 +17,15 @@
     6 :_ 7 "x" 8 "x"}))
 
 (def before-win-message
-  (str "\n x | 1 | o \n--- --- --- \n "
-       "3 | o | 5 \n--- --- --- \n "
-       "6 | x | x \n\n" "It is o's turn.\n"
+  (str "\n x  | 1  | o  \n---- ---- ---- \n "
+       "3  | o  | 5  \n---- ---- ---- \n "
+       "6  | x  | x  \n\n" "It is o's turn.\n"
        "Enter a number 0-8 to mark that position on the board: "
-       "\n\n x | 1 | o "
-       "\n--- --- --- \n "
-       "3 | o | 5 "
-       "\n--- --- --- \n "
-       "o | x | x \n\n"))
+       "\n\n x  | 1  | o  "
+       "\n---- ---- ---- \n "
+       "3  | o  | 5  "
+       "\n---- ---- ---- \n "
+       "o  | x  | x  \n\n"))
 
 (def sample-human-p1
   {:marker "x" :human true :goes-first true})

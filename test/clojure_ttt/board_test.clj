@@ -183,15 +183,15 @@
 
 (deftest render-space-test
   (testing "the space index when the space is empty"
-    (is (= " 4 "
+    (is (= " 4  "
       (render-space [4 :_])))
   (testing "the space index when the space is marked"
-    (is (= " x "
+    (is (= " x  "
       (render-space [1 "x"]))))))
 
 (deftest to-string-list-test
-  (testing "converts the board to a list of strings"
-    (is (= '(" x " " 1 " " 2 " " 3 " " x " " 5 " " 6 " " 7 " " x ") (to-string-list diag-0-winner)))))
+  (testing "converts the board to a list of padded strings"
+    (is (= '(" x  " " 1  " " 2  " " 3  " " x  " " 5  " " 6  " " 7  " " x  ") (to-string-list diag-0-winner)))))
 
 (deftest has-winner-test
   (testing "returns true when there is a winner on a row"

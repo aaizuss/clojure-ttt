@@ -66,10 +66,13 @@
 (defn to-indexed-vec [board]
   (vec (interleave board)))
 
+(defn render-index [index]
+  (if (< index 10) (str " " index "  ") (str " " index " ")))
+
 (defn render-space [[index marker]]
   (if (= marker empty-space)
-      (str " " index " ")
-      (str " " marker " ")))
+      (render-index index)
+      (str " " marker "  ")))
 
 (defn to-string-list [board]
   (let [board-vector (to-indexed-vec board)]

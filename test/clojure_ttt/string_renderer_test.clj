@@ -14,24 +14,26 @@
     (is (= "X wins!" (win-message "X")))))
 
 (deftest row-divider-test
-  (testing "returns row-divider"
+  (testing "returns row-divider for 3x3 board"
     (is (=
-      "\n--- --- --- \n"
-      (row-divider)))))
+      "\n---- ---- ---- \n"
+      (row-divider 3))))
+  (testing "returns row divider for 4x4 board"
+    (is (= "\n---- ---- ---- ---- \n" (row-divider 4)))))
 
 (deftest row-strings-test
   (testing "returns 2d list of strings representing rows"
     (is (= (row-strings diagonal-winner)
-            ['(" x " "|" " 1 " "|" " 2 ")
-            (list "\n--- --- --- \n")
-            '(" 3 " "|" " x " "|" " 5 ")
-            (list "\n--- --- --- \n")
-            '(" 6 " "|" " 7 " "|" " x ")]))))
+            ['(" x  " "|" " 1  " "|" " 2  ")
+            (list "\n---- ---- ---- \n")
+            '(" 3  " "|" " x  " "|" " 5  ")
+            (list "\n---- ---- ---- \n")
+            '(" 6  " "|" " 7  " "|" " x  ")]))))
 
 (deftest render-board-test
   (testing "renders the board as a string (with artistic flair)"
     (is (= (render-board diagonal-winner)
-            (wrap-newline " x | 1 | 2 \n--- --- --- \n 3 | x | 5 \n--- --- --- \n 6 | 7 | x ")))))
+            (wrap-newline " x  | 1  | 2  \n---- ---- ---- \n 3  | x  | 5  \n---- ---- ---- \n 6  | 7  | x  ")))))
 
 (deftest marker-selection-test
   (testing "renders the message for player 2"

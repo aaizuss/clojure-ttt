@@ -37,7 +37,7 @@
 
 (defn setup-game [game-options]
   (let [players (setup-players game-options)]
-    (assoc players :board (board/new-board))))
+    (assoc players :board (board/new-board 3)))) ; TODO: abstract the 3
 
 (defn show-pre-move-info [board current-player opponent past-move]
   (io/show (renderer/render-board board))
