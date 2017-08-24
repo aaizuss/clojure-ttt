@@ -29,6 +29,7 @@
   (testing "chooses winning move"
     (is (= 5 (get-ai-move "c" c-almost-win sample-players)))))
 
+; lol
 (deftest computers-tie-test
   (testing "computers tie when playing against each other"
     (let
@@ -52,6 +53,3 @@
        c-move-5 (get-ai-move "x" board-8 sample-players)
        board-9 (board/mark-space board-8 c-move-5 "c")]
     (is (= true (board/tie? board-9))))))
-
-
-; i’m struggling to figure out how to improve my ai tests without adding more dependencies. right now i test that the ai will block the opponent from winning, and that it chooses the winning move when it has the opportunity. the only other way i can think to test would be making 2 computers play against each other and testing that the result is a tie, but since the ai namespace only makes moves, i’d have to do it one move at a time
