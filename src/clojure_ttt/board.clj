@@ -3,13 +3,16 @@
 
 (def empty-space :_)
 
-(def board-dimension 3)
+(defn board-dimension [board]
+  (int (Math/sqrt (count board))))
 
-(def num-spaces (* board-dimension board-dimension))
+(defn num-spaces [board]
+  (count board))
 
-(defn new-board []
-  (into (sorted-map)
-  (for [space (range num-spaces) value [empty-space]] [space value])))
+(defn new-board [board-dimension]
+  (let [num-spaces (* board-dimension board-dimension)]
+    (into (sorted-map)
+      (for [space (range num-spaces) value [empty-space]] [space value]))))
 
 (defn marked? [board space]
   (not (= (get board space) empty-space)))
@@ -23,20 +26,28 @@
 (defn full? [board]
   (= 0 (count (empty-spaces board))))
 
-(defn space-exists? [space]
-  (and (<= 0 space) (< space num-spaces)))
+(defn space-exists? [board space]
+  (and (<= 0 space) (< space (num-spaces board))))
 
 (defn rows [board]
-  (into [] (partition board-dimension (vals board))))
+  (into [] (partition (board-dimension board) (vals board))))
 
 (defn columns [board]
   (apply mapv vector (rows board)))
 
 (defn diagonal-top-left [board]
-  (vals (select-keys board [0 4 8])))
+  (let [size (board-dimension board)
+        end (num-spaces board)
+        step (+ 1 size)
+        keys (range 0 end step)]
+    (vals (select-keys board keys))))
 
 (defn diagonal-top-right [board]
-  (vals (select-keys board [2 4 6])))
+  (let [size (board-dimension board)
+        end (- (num-spaces board) 1)
+        step (- size 1)
+        keys (range step end step)]
+    (vals (select-keys board keys))))
 
 (defn diagonals [board]
   [(diagonal-top-left board) (diagonal-top-right board)])
@@ -55,10 +66,13 @@
 (defn to-indexed-vec [board]
   (vec (interleave board)))
 
+(defn render-index [index]
+  (if (< index 10) (str " " index "  ") (str " " index " ")))
+
 (defn render-space [[index marker]]
   (if (= marker empty-space)
-      (str " " index " ")
-      (str " " marker " ")))
+      (render-index index)
+      (str " " marker "  ")))
 
 (defn to-string-list [board]
   (let [board-vector (to-indexed-vec board)]

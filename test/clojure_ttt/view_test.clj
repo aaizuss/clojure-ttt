@@ -3,9 +3,10 @@
             [clojure-ttt.view :refer :all]
             [clojure-ttt.board :as board]))
 
-(def blank-board (board/new-board))
+(def blank-board (board/new-board 3))
 (def marked-board (board/mark-space blank-board 6 "x"))
 (def game-options {:1 :human-v-human :2 :human-v-cpu :3 :cpu-v-human})
+(def board-options {:3 :3x3 :4 :4x4})
 
 (deftest invalid-marker-msg-test
   (testing "must be single letter"
@@ -36,9 +37,6 @@
         (with-in-str "a\nx"
           (get-marker :order-num 2 :opponent-marker "a")))))))
 
-(defn out-fixture [f]
-  (with-out-str f))
-
 (deftest get-move-test
   (testing "returns a valid move as an int"
     (with-out-str
@@ -58,3 +56,9 @@
     (with-out-str
       (is (= :human-v-cpu
           (with-in-str "2" (get-game-selection game-options)))))))
+
+(deftest get-board-selection-test
+  (testing "valid input returns the game selection"
+    (with-out-str
+      (is (= :4x4
+          (with-in-str "4" (get-board-selection board-options)))))))

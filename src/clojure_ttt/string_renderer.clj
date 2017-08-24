@@ -24,15 +24,16 @@
     (wrap-newline (apply str (flatten pieces)))))
 
 (defn row-strings [board]
-  (let [board-string-list (board/to-string-list board)
-        partitioned (partition 3 board-string-list)
+  (let [size (board/board-dimension board)
+        board-string-list (board/to-string-list board)
+        partitioned (partition size board-string-list)
         rows (map (fn [item] (interpose "|" item)) partitioned)
-        divider (list (row-divider))]
+        divider (list (row-divider size))]
       (interpose divider rows)))
 
-(defn row-divider []
-  (let [part (str (apply str (take 3 (repeat "-"))) " ")
-        parts (take 3 (repeat part))]
+(defn row-divider [board-dimension]
+  (let [part (str (apply str (take 4 (repeat "-"))) " ")
+        parts (take board-dimension (repeat part))]
       (wrap-newline (apply str parts))))
 
 (def welcome
@@ -68,6 +69,9 @@
 
 (def game-selection-msg
   (wrap-newline (:game-selection-msg string-map)))
+
+(def board-selection-msg
+  (wrap-newline (:board-selection-msg string-map)))
 
 (def invalid-choice-msg (:invalid-choice-msg string-map))
 

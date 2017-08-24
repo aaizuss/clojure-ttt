@@ -7,6 +7,8 @@
             [clojure-ttt.ai :as ai]))
 
 (def game-options {:1 :human-v-human :2 :human-v-cpu :3 :cpu-v-human})
+(def board-options {:3 :3x3 :4 :4x4})
+
 (def no-move -1)
 
 (defn stub-players [game-type]
@@ -23,6 +25,16 @@
     ; raise exception here?
     :else "this can't happen unless game-options names don't match"))
 
+(defn new-board-from-choice [board-choice]
+  (cond
+    (= :4x4 board-choice) (board/new-board 4)
+    (= :3x3 board-choice) (board/new-board 3)
+    :else "this can't happen unless board-options names don't match"))
+
+(defn setup-board [board-options]
+  (let [board-choice (view/get-board-selection board-options)]
+    (new-board-from-choice board-choice)))
+
 (defn setup-players [game-options]
   (let [game-type (view/get-game-selection game-options)
         incomplete-players (stub-players game-type)
@@ -35,9 +47,10 @@
 (defn player-markers [current-player opponent]
   [(player/get-marker current-player) (player/get-marker opponent)])
 
-(defn setup-game [game-options]
-  (let [players (setup-players game-options)]
-    (assoc players :board (board/new-board))))
+(defn setup-game [board-options game-options]
+  (let [board (setup-board board-options)
+        players (setup-players game-options)]
+    (assoc players :board board)))
 
 (defn show-pre-move-info [board current-player opponent past-move]
   (io/show (renderer/render-board board))
@@ -76,4 +89,4 @@
 
 (defn play []
   (io/show renderer/welcome)
-  (game-loop (setup-game game-options)))
+  (game-loop (setup-game board-options game-options)))

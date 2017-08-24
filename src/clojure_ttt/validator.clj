@@ -10,7 +10,7 @@
 
 (defn valid-board-position? [board space]
   (and (is-num? space)
-       (board/space-exists? (utils/to-num space))))
+       (board/space-exists? board (utils/to-num space))))
 
 (defn valid-move? [board proposed-move]
   (and
@@ -22,5 +22,5 @@
        (= 1 (count (re-matches #"^[a-zA-Z]$" input-mark)))
        (not (= input-mark opponent-mark))))
 
-(defn valid-game-selection? [input game-options]
-  (= true (some #(= input %) (map name (keys game-options)))))
+(defn valid-selection-from-options? [input options]
+  (= true (some #(= input %) (map name (keys options)))))

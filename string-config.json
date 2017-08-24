@@ -14,5 +14,6 @@
   "invalid-mark-already-taken": "Your opponent already chose that marker.",
   "game-selection-msg": "Enter a number to select a game type.\n\n       P1            P2\n------------------------------\n[1]  Human     vs   Human\n[2]  Human     vs   Computer\n[3]  Computer  vs   Human",
   "invalid-choice-msg": "Your choice is invalid.",
-  "move-history-msg": " marked space "
+  "move-history-msg": " marked space ",
+  "board-selection-msg": "Enter a number to select a board size\n[3]   3 x 3\n[4]   4 x 4"
 }
