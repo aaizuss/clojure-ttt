@@ -33,7 +33,7 @@
 (deftest computers-tie-test
   (testing "computers tie when playing against each other"
     (let
-      [new-board (board/new-board)
+      [new-board (board/new-board 3)
        c-move-1 (get-ai-move "c" new-board sample-players)
        board-1 (board/mark-space new-board c-move-1 "c")
        x-move-1 (get-ai-move "x" board-1 sample-players)

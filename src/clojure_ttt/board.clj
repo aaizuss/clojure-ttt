@@ -26,7 +26,6 @@
 (defn full? [board]
   (= 0 (count (empty-spaces board))))
 
-; this might not be used...
 (defn space-exists? [board space]
   (and (<= 0 space) (< space (num-spaces board))))
 

@@ -10,7 +10,7 @@
 
 (defn valid-board-position? [board space]
   (and (is-num? space)
-       (board/space-exists? (utils/to-num space))))
+       (board/space-exists? board (utils/to-num space))))
 
 (defn valid-move? [board proposed-move]
   (and

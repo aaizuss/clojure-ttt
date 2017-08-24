@@ -3,7 +3,7 @@
             [clojure-ttt.validator :refer :all]
             [clojure-ttt.board :as board]))
 
-(def blank-board (board/new-board))
+(def blank-board (board/new-board 3))
 
 (def marked-board
   (into (sorted-map)

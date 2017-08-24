@@ -3,7 +3,7 @@
             [clojure-ttt.view :refer :all]
             [clojure-ttt.board :as board]))
 
-(def blank-board (board/new-board))
+(def blank-board (board/new-board 3))
 (def marked-board (board/mark-space blank-board 6 "x"))
 (def game-options {:1 :human-v-human :2 :human-v-cpu :3 :cpu-v-human})
 
@@ -35,9 +35,6 @@
       (is (= "x"
         (with-in-str "a\nx"
           (get-marker :order-num 2 :opponent-marker "a")))))))
-
-(defn out-fixture [f]
-  (with-out-str f))
 
 (deftest get-move-test
   (testing "returns a valid move as an int"
