@@ -50,6 +50,6 @@
 
 (deftest valid-game-selection-test
   (testing "1 is valid"
-    (is (= true (valid-game-selection? "1" game-options))))
+    (is (= true (valid-selection-from-options? "1" game-options))))
   (testing "9 is invalid"
-    (is (= false (valid-game-selection? "9" game-options)))))
+    (is (= false (valid-selection-from-options? "9" game-options)))))

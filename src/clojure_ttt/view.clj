@@ -33,8 +33,16 @@
 
 (defn get-game-selection [game-options]
   (let [selection (io/prompt renderer/game-selection-msg)]
-    (if (validator/valid-game-selection? selection game-options)
+    (if (validator/valid-selection-from-options? selection game-options)
         ((keyword selection) game-options)
         (do
           (io/show renderer/invalid-choice-msg)
           (recur game-options)))))
+
+(defn get-board-selection [board-options]
+  (let [choice (io/prompt renderer/board-selection-msg)]
+    (if (validator/valid-selection-from-options? choice board-options)
+        ((keyword choice) board-options)
+        (do
+          (io/show renderer/invalid-choice-msg)
+          (recur board-options)))))

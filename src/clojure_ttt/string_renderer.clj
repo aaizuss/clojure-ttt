@@ -70,6 +70,9 @@
 (def game-selection-msg
   (wrap-newline (:game-selection-msg string-map)))
 
+(def board-selection-msg
+  (wrap-newline (:board-selection-msg string-map)))
+
 (def invalid-choice-msg (:invalid-choice-msg string-map))
 
 (defn move-history-msg
