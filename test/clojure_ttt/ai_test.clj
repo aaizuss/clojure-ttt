@@ -28,3 +28,28 @@
     (is (= 2 (get-ai-move "c" x-almost-win sample-players))))
   (testing "chooses winning move"
     (is (= 5 (get-ai-move "c" c-almost-win sample-players)))))
+
+; lol
+(deftest computers-tie-test
+  (testing "computers tie when playing against each other"
+    (let
+      [new-board (board/new-board)
+       c-move-1 (get-ai-move "c" new-board sample-players)
+       board-1 (board/mark-space new-board c-move-1 "c")
+       x-move-1 (get-ai-move "x" board-1 sample-players)
+       board-2 (board/mark-space board-1 x-move-1 "x")
+       c-move-2 (get-ai-move "c" board-2 sample-players)
+       board-3 (board/mark-space board-2 c-move-2 "c")
+       x-move-2 (get-ai-move "x" board-3 sample-players)
+       board-4 (board/mark-space board-3 x-move-2 "x")
+       c-move-3 (get-ai-move "x" board-4 sample-players)
+       board-5 (board/mark-space board-4 c-move-3 "c")
+       x-move-3 (get-ai-move "x" board-5 sample-players)
+       board-6 (board/mark-space board-5 x-move-3 "x")
+       c-move-4 (get-ai-move "x" board-6 sample-players)
+       board-7 (board/mark-space board-6 c-move-4 "c")
+       x-move-4 (get-ai-move "x" board-7 sample-players)
+       board-8 (board/mark-space board-7 x-move-4 "x")
+       c-move-5 (get-ai-move "x" board-8 sample-players)
+       board-9 (board/mark-space board-8 c-move-5 "c")]
+    (is (= true (board/tie? board-9))))))

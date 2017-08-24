@@ -58,21 +58,24 @@
 
 
 (deftest setup-players-test
-  (testing "returns players map for human v computer game"
-    (let [player-map
-        (with-in-str "2\nx\no" (setup-players game-options))]
-      (is (= sample-human-p1 (:current-player player-map)))
-      (is (= sample-computer-p2 (:opponent player-map)))))
-  (testing "returns players map for computer v human game"
-    (let [player-map
-        (with-in-str "3\no\nx" (setup-players game-options))]
-      (is (= sample-computer-p1 (:current-player player-map)))
-      (is (= sample-human-p2 (:opponent player-map)))))
-  (testing "returns players map for human v human game"
-    (let [player-map
-        (with-in-str "1\nx\no" (setup-players game-options))]
-      (is (= sample-human-p1 (:current-player player-map)))
-      (is (= sample-human-o (:opponent player-map))))))
+  (with-out-str
+    (testing "returns players map for human v computer game"
+      (let [player-map
+          (with-in-str "2\nx\no" (setup-players game-options))]
+        (is (= sample-human-p1 (:current-player player-map)))
+        (is (= sample-computer-p2 (:opponent player-map))))))
+  (with-out-str
+    (testing "returns players map for computer v human game"
+      (let [player-map
+          (with-in-str "3\no\nx" (setup-players game-options))]
+        (is (= sample-computer-p1 (:current-player player-map)))
+        (is (= sample-human-p2 (:opponent player-map))))))
+  (with-out-str
+    (testing "returns players map for human v human game"
+      (let [player-map
+          (with-in-str "1\nx\no" (setup-players game-options))]
+        (is (= sample-human-p1 (:current-player player-map)))
+        (is (= sample-human-o (:opponent player-map)))))))
 
 (deftest game-loop-test
   (testing "halts when o wins and displays message that o wins"

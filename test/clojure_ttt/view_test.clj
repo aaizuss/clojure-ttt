@@ -9,39 +9,52 @@
 
 (deftest invalid-marker-msg-test
   (testing "must be single letter"
-    (is (= "www is an invalid mark. Markers must be a single letter."
-            (invalid-marker-msg "www" ""))))
+    (with-out-str
+      (is (= "www is an invalid mark. Markers must be a single letter."
+            (invalid-marker-msg "www" "")))))
   (testing "does not accept special characters"
-    (is (= "* is an invalid mark. You must choose a letter."
-            (invalid-marker-msg "*" ""))))
+    (with-out-str
+      (is (= "* is an invalid mark. You must choose a letter."
+            (invalid-marker-msg "*" "")))))
   (testing "does not accept marker that is the same as opponent"
-    (is (= "A is an invalid mark. Your opponent already chose that marker."
-            (invalid-marker-msg "A" "A")))))
+    (with-out-str
+      (is (= "A is an invalid mark. Your opponent already chose that marker."
+            (invalid-marker-msg "A" "A"))))))
 
 (deftest get-marker-test
   (testing "returns a valid mark"
-    (is (= "x"
-        (with-in-str "x" (get-marker :order-num 1)))))
+    (with-out-str
+      (is (= "x" (with-in-str "x" (get-marker :order-num 1))))))
   (testing "continues asking for a marker until it is valid"
-    (is (= "x"
-        (with-in-str "?\n4\nbbb\nx" (get-marker :order-num 1)))))
+    (with-out-str
+      (is (= "x"
+        (with-in-str "?\n4\nbbb\nx"
+          (get-marker :order-num 1))))))
   (testing "continues asking for a marker if given opponent mark"
-    (is (= "x"
+    (with-out-str
+      (is (= "x"
         (with-in-str "a\nx"
-            (get-marker :order-num 2 :opponent-marker "a"))))))
+          (get-marker :order-num 2 :opponent-marker "a")))))))
+
+(defn out-fixture [f]
+  (with-out-str f))
 
 (deftest get-move-test
   (testing "returns a valid move as an int"
-    (is (= 4
-        (with-in-str "4" (get-move blank-board)))))
+    (with-out-str
+      (is (= 4
+        (with-in-str "4" (get-move blank-board))))))
   (testing "continues asking for a move until it is valid"
-    (is (= 2
-        (with-in-str "10\na\n2" (get-move blank-board)))))
+    (with-out-str
+      (is (= 2
+        (with-in-str "10\na\n2" (get-move blank-board))))))
   (testing "continues asking for a marker if space is taken"
-    (is (= 0
-        (with-in-str "6\n0" (get-move marked-board))))))
+    (with-out-str
+      (is (= 0
+          (with-in-str "6\n0" (get-move marked-board)))))))
 
 (deftest get-game-selection-test
   (testing "valid input returns the game selection"
-    (is (= :human-v-cpu
-        (with-in-str "2" (get-game-selection game-options))))))
+    (with-out-str
+      (is (= :human-v-cpu
+          (with-in-str "2" (get-game-selection game-options)))))))
