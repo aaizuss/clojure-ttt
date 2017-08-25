@@ -24,7 +24,27 @@
     8 "x" 9 :_ 10 :_ 11 :_
     12 :_ 13 :_ 14 :_ 15 :_}))
 
+(def c-almost-lose-4x4
+ (into (sorted-map)
+   {0 "c" 1 :_ 2 :_ 3 :_
+    4 "x" 5 "x" 6 :_ 7 "x"
+    8 "c" 9 :_ 10 :_ 11 :_
+    12 :_ 13 :_ 14 :_ 15 :_}))
+
+(def early-4x4
+ (into (sorted-map)
+   {0 "x" 1 :_ 2 :_ 3 :_
+    4 :_ 5 :_ 6 :_ 7 "c"
+    8 "x" 9 :_ 10 :_ 11 :_
+    12 :_ 13 :_ 14 :_ 15 :_}))
+
 (def markers ["c" "x"])
+
+(deftest need-special-early-moves-test
+  (testing "true for 4x4"
+    (is (= true (need-special-early-moves? early-4x4))))
+  (testing "false for 3x3"
+    (is (= false (need-special-early-moves? (board/new-board 3))))))
 
 (deftest change-turn-test
   (testing "reverses order of markers"
@@ -36,7 +56,9 @@
   (testing "chooses winning move"
     (is (= 5 (get-ai-move "c" c-almost-win sample-players))))
   (testing "chooses winning move on 4x4 board"
-    (is (= 6 (get-ai-move "c" c-almost-win-4x4 sample-players)))))
+    (is (= 6 (get-ai-move "c" c-almost-win-4x4 sample-players))))
+  (testing "blocks opponent from winning 4x4"
+    (is (= 6 (get-ai-move "c" c-almost-lose-4x4 sample-players)))))
 
 ; lol
 (deftest computers-tie-test
