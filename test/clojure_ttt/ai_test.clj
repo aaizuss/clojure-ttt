@@ -54,11 +54,11 @@
   (testing "blocks opponent from winning"
     (is (= 2 (get-ai-move "c" x-almost-win sample-players))))
   (testing "chooses winning move"
-    (is (= 5 (get-ai-move "c" c-almost-win sample-players))))
-  (testing "chooses winning move on 4x4 board"
-    (is (= 6 (get-ai-move "c" c-almost-win-4x4 sample-players))))
-  (testing "blocks opponent from winning 4x4"
-    (is (= 6 (get-ai-move "c" c-almost-lose-4x4 sample-players)))))
+    (is (= 5 (get-ai-move "c" c-almost-win sample-players)))))
+  ; (testing "chooses winning move on 4x4 board"
+  ;   (is (= 6 (get-ai-move "c" c-almost-win-4x4 sample-players))))
+  ; (testing "blocks opponent from winning 4x4"
+  ;   (is (= 6 (get-ai-move "c" c-almost-lose-4x4 sample-players)))))
 
 ; lol
 (deftest computers-tie-test
@@ -83,4 +83,19 @@
        board-8 (board/mark-space board-7 x-move-4 "x")
        c-move-5 (get-ai-move "x" board-8 sample-players)
        board-9 (board/mark-space board-8 c-move-5 "c")]
-    (is (= true (board/tie? board-9))))))
+    (is (= true (board/tie? board-9)))))
+  (testing "start from mid game"
+    (let
+      [c-move-4 (get-ai-move "c" x-almost-win sample-players)
+       board-1 (board/mark-space x-almost-win c-move-4 "c")
+       x-move-5 (get-ai-move "x" board-1 sample-players)
+       board-2 (board/mark-space board-1 x-move-5 "x")
+       c-move-6 (get-ai-move "c" board-2 sample-players)
+       board-3 (board/mark-space board-2 c-move-6 "c")
+       x-move-7 (get-ai-move "x" board-3 sample-players)
+       board-4 (board/mark-space board-3 x-move-7 "x")
+       c-move-8 (get-ai-move "x" board-4 sample-players)
+       board-5 (board/mark-space board-4 c-move-8 "c")
+       x-move-9 (get-ai-move "x" board-5 sample-players)
+       board-6 (board/mark-space board-5 x-move-9 "x")]
+    (is (= true (board/tie? board-6))))))
