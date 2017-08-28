@@ -31,6 +31,17 @@
           (io/show renderer/invalid-move-msg)
           (recur board)))))
 
+; how can i make this better - it's handling a lot
+(defn get-move-or-undo [board]
+  (let [move (io/prompt renderer/choose-space-or-undo)]
+    (cond
+      (= "u" move) "u"
+      (validator/valid-move? board move) (utils/to-num move)
+      :else
+        (do
+          (io/show renderer/invalid-move-msg)
+          (recur board)))))
+
 (defn get-game-selection [game-options]
   (let [selection (io/prompt renderer/game-selection-msg)]
     (if (validator/valid-selection-from-options? selection game-options)

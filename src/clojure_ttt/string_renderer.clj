@@ -50,6 +50,8 @@
 
 (def choose-space (:choose-space-msg string-map))
 
+(def choose-space-or-undo (:choose-space-or-undo-msg string-map))
+
 (defn invalid-mark [mark]
   (str mark (:invalid-mark-msg string-map)))
 

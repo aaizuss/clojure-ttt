@@ -51,6 +51,20 @@
       (is (= 0
           (with-in-str "6\n0" (get-move marked-board)))))))
 
+(deftest get-move-or-undo-test
+  (testing "returns a valid move as an int"
+    (with-out-str
+      (is (= 4
+        (with-in-str "4" (get-move-or-undo blank-board))))))
+  (testing "continues asking for a move until it is valid"
+    (with-out-str
+      (is (= 2
+        (with-in-str "10\na\n2" (get-move-or-undo blank-board))))))
+  (testing "returns u if user types u"
+    (with-out-str
+      (is (= "u"
+          (with-in-str "u" (get-move-or-undo marked-board)))))))
+
 (deftest get-game-selection-test
   (testing "valid input returns the game selection"
     (with-out-str

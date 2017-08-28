@@ -6,6 +6,7 @@
   "marker-selection-msg": "Choose a single letter for Player ",
   "win-msg": " wins!",
   "choose-space-msg": "Enter a number 0-8 to mark that position on the board: ",
+  "choose-space-or-undo-msg": "Enter a number 0-8 to mark that position on the board,\n or type u to undo",
   "invalid-mark-msg": " is an invalid mark. ",
   "invalid-move-msg": "You can't move there. ",
   "taken-space-msg": "That space is taken. ",
