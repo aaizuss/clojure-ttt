@@ -73,15 +73,15 @@
        board-3 (board/mark-space board-2 c-move-2 "c")
        x-move-2 (get-ai-move "x" board-3 sample-players)
        board-4 (board/mark-space board-3 x-move-2 "x")
-       c-move-3 (get-ai-move "x" board-4 sample-players)
+       c-move-3 (get-ai-move "c" board-4 sample-players)
        board-5 (board/mark-space board-4 c-move-3 "c")
        x-move-3 (get-ai-move "x" board-5 sample-players)
        board-6 (board/mark-space board-5 x-move-3 "x")
-       c-move-4 (get-ai-move "x" board-6 sample-players)
+       c-move-4 (get-ai-move "c" board-6 sample-players)
        board-7 (board/mark-space board-6 c-move-4 "c")
        x-move-4 (get-ai-move "x" board-7 sample-players)
        board-8 (board/mark-space board-7 x-move-4 "x")
-       c-move-5 (get-ai-move "x" board-8 sample-players)
+       c-move-5 (get-ai-move "c" board-8 sample-players)
        board-9 (board/mark-space board-8 c-move-5 "c")]
     (is (= true (board/tie? board-9)))))
   (testing "start from mid game"
@@ -94,7 +94,7 @@
        board-3 (board/mark-space board-2 c-move-6 "c")
        x-move-7 (get-ai-move "x" board-3 sample-players)
        board-4 (board/mark-space board-3 x-move-7 "x")
-       c-move-8 (get-ai-move "x" board-4 sample-players)
+       c-move-8 (get-ai-move "c" board-4 sample-players)
        board-5 (board/mark-space board-4 c-move-8 "c")
        x-move-9 (get-ai-move "x" board-5 sample-players)
        board-6 (board/mark-space board-5 x-move-9 "x")]
