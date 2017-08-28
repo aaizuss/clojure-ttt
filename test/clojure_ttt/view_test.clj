@@ -55,15 +55,15 @@
   (testing "returns a valid move as an int"
     (with-out-str
       (is (= 4
-        (with-in-str "4" (get-move-or-undo blank-board))))))
-  (testing "continues asking for a move until it is valid"
-    (with-out-str
-      (is (= 2
-        (with-in-str "10\na\n2" (get-move-or-undo blank-board))))))
-  (testing "returns u if user types u"
+        (with-in-str "4" (get-move-or-undo blank-board []))))))
+  (testing "returns u if user types u with a long enough move history"
     (with-out-str
       (is (= "u"
-          (with-in-str "u" (get-move-or-undo marked-board)))))))
+          (with-in-str "u" (get-move-or-undo marked-board [6 8 2]))))))
+  (testing "continues asking for a move when move history is empty"
+    (with-out-str
+      (is (= 4
+          (with-in-str "u\nu\n4" (get-move-or-undo blank-board [])))))))
 
 (deftest get-game-selection-test
   (testing "valid input returns the game selection"

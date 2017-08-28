@@ -8,6 +8,7 @@
 
 (def game-options {:1 :human-v-human :2 :human-v-cpu :3 :cpu-v-human})
 (def board-options {:3 :3x3 :4 :4x4})
+(def undo "u")
 
 (defn stub-players [game-type]
   (cond
@@ -64,27 +65,43 @@
       (let [winner (board/get-winner board)]
         (io/show (renderer/win-message winner)))))
 
-(defn get-player-move [current-player opponent board]
+(defn get-player-move [current-player opponent board move-history]
   (let [player-markers (player-markers current-player opponent)
         current-player-marker (player/get-marker current-player)]
-    (if (player/is-human? current-player)
-        (view/get-move board)
-        (ai/get-ai-move current-player-marker board player-markers))))
+    (cond
+      (player/is-computer? opponent) (view/get-move-or-undo board move-history)
+      (player/is-human? current-player) (view/get-move board)
+      (player/is-computer? current-player) (ai/get-ai-move current-player-marker board player-markers))))
+
+(defn undo-moves [board move-history current-player opponent]
+  (let [b1 (board/clear-space board (last move-history))
+        h1 (pop move-history)
+        new-board (board/clear-space b1 (last h1))
+        new-history (pop h1)]
+    {:board new-board
+     :current-player current-player
+     :opponent opponent
+     :move-history new-history}))
+
+(defn update-game [board move marker current-player opponent move-history]
+  (if (= move undo)
+      (undo-moves board move-history current-player opponent)
+      (let [marked-board (board/mark-space board move marker)
+            new-history (conj move-history move)]
+        {:board marked-board
+         :current-player opponent
+         :opponent current-player
+         :move-history new-history})))
 
 (defn game-loop [{:keys [board current-player opponent move-history]}]
   (show-pre-move-info board current-player opponent move-history)
   (let [current-player-marker (player/get-marker current-player)
-        opponent-marker (player/get-marker opponent)
-        move (get-player-move current-player opponent board)
-        new-move-history (conj move-history move)
-        marked-board (board/mark-space board move current-player-marker)]
-      (if (board/game-over? marked-board)
-          (show-game-over marked-board)
-          (recur
-            {:board marked-board
-             :current-player opponent
-             :opponent current-player
-             :move-history new-move-history}))))
+        move (get-player-move current-player opponent board move-history)
+        game-state (update-game board move current-player-marker current-player opponent move-history)
+        updated-board (:board game-state)]
+      (if (board/game-over? updated-board)
+          (show-game-over updated-board)
+          (recur game-state))))
 
 (defn play []
   (io/show renderer/welcome)

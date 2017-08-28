@@ -53,3 +53,9 @@
     (is (= true (valid-selection-from-options? "1" game-options))))
   (testing "9 is invalid"
     (is (= false (valid-selection-from-options? "9" game-options)))))
+
+(deftest valid-undo-test
+  (testing "1 move is invalid"
+    (is (= false (valid-undo? "u" [2]))))
+  (testing "2 moves is valid"
+    (is (= true (valid-undo? "u" [1 2])))))
