@@ -9,8 +9,6 @@
 (def game-options {:1 :human-v-human :2 :human-v-cpu :3 :cpu-v-human})
 (def board-options {:3 :3x3 :4 :4x4})
 
-(def no-move -1)
-
 (defn stub-players [game-type]
   (cond
     (= :human-v-human game-type)
@@ -50,13 +48,13 @@
 (defn setup-game [board-options game-options]
   (let [board (setup-board board-options)
         players (setup-players game-options)]
-    (assoc players :board board)))
+    (assoc players :board board :move-history [])))
 
-(defn show-pre-move-info [board current-player opponent past-move]
+(defn show-pre-move-info [board current-player opponent move-history]
   (io/show (renderer/render-board board))
-  (if (not= -1 past-move)
-    (io/show (renderer/move-history-msg (player/get-marker opponent) past-move)))
-  (io/show (renderer/turn-message (player/get-marker current-player))))
+  (if (empty? move-history)
+    (io/show (renderer/turn-message (player/get-marker current-player)))
+    (io/show (renderer/move-history-msg (player/get-marker opponent) (last move-history)))))
 
 ; want to edit this so the message is special depending on game type
 (defn show-game-over [board]
@@ -73,11 +71,12 @@
         (view/get-move board)
         (ai/get-ai-move current-player-marker board player-markers))))
 
-(defn game-loop [{:keys [board current-player opponent prev-move] :or {prev-move no-move}}]
-  (show-pre-move-info board current-player opponent prev-move)
+(defn game-loop [{:keys [board current-player opponent move-history]}]
+  (show-pre-move-info board current-player opponent move-history)
   (let [current-player-marker (player/get-marker current-player)
         opponent-marker (player/get-marker opponent)
         move (get-player-move current-player opponent board)
+        new-move-history (conj move-history move)
         marked-board (board/mark-space board move current-player-marker)]
       (if (board/game-over? marked-board)
           (show-game-over marked-board)
@@ -85,7 +84,7 @@
             {:board marked-board
              :current-player opponent
              :opponent current-player
-             :prev-move move}))))
+             :move-history new-move-history}))))
 
 (defn play []
   (io/show renderer/welcome)
