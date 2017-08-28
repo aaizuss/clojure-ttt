@@ -23,6 +23,9 @@
 (defn empty-spaces [board]
   (into [] (for [[space value] board :when (= empty-space value)] space)))
 
+(defn num-empty-spaces [board]
+  (count (empty-spaces board)))
+
 (defn full? [board]
   (= 0 (count (empty-spaces board))))
 

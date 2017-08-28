@@ -110,6 +110,12 @@
   (testing "marked spaces are not included in list"
     (is (= '(1 2 3 5 6 7) (empty-spaces marked-board)))))
 
+(deftest num-empty-spaces-test
+  (testing "new 3x3 board has 9 empty spaces"
+    (is (= 9 (num-empty-spaces blank-board))))
+  (testing "marked 4x4 board"
+    (is (= 12 (num-empty-spaces right-diag-4x4)))))
+
 (deftest full-test
   (testing "returns false for empty board"
     (is (= false (full? blank-board))))

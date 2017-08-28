@@ -56,7 +56,23 @@
         scores (map #(speed-scoring (board/mark-space board % current-marker) ai-marker players depth) possible-moves)]
     (zipmap possible-moves scores)))
 
+(def num-spaces-big-board 16)
+(defn big-board? [board]
+  (= num-spaces-big-board (board/num-spaces board)))
+(def big-board-corners '(0 3 12 15))
+
+(defn need-special-early-moves? [board]
+  (if (and (big-board? board) (> (board/num-empty-spaces board) 12))
+       true
+       false))
+
+(defn choose-from-corners [board]
+  (let [corners (filter #(not (board/marked? board %)) big-board-corners)]
+    (rand-nth corners)))
+
 (defn get-ai-move [ai-marker board players]
-  (let [scored-moves (explore-and-score-moves board ai-marker players depth)
-        player (current-player-marker players)]
-    (best-move player ai-marker scored-moves)))
+  (if (need-special-early-moves? board)
+      (choose-from-corners board)
+      (let [scored-moves (explore-and-score-moves board ai-marker players depth)
+            player (current-player-marker players)]
+        (best-move player ai-marker scored-moves))))
