@@ -24,3 +24,6 @@
 
 (defn valid-selection-from-options? [input options]
   (= true (some #(= input %) (map name (keys options)))))
+
+(defn valid-undo? [input move-history]
+  (and (= "u" input) (>= (count move-history) 2)))
