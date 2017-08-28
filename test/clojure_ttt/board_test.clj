@@ -104,6 +104,17 @@
                 mark (get board 1)]
                   mark)))))
 
+(deftest clear-space-test
+  (testing "clears space 2"
+    (is (= :_
+          (let [board (clear-space row-0-winner 2)
+                mark (get board 2)]
+                  mark)))))
+
+(deftest clear-spaces-test
+  (testing "clears marked spaces"
+    (is (= blank-board (clear-spaces row-0-winner [0 1 2])))))
+
 (deftest empty-spaces-test
   (testing "all spaces are empty on a new board"
     (is (= (range 9) (empty-spaces blank-board))))

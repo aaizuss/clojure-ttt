@@ -20,6 +20,18 @@
 (defn mark-space [board space marker]
   (assoc board space marker))
 
+(defn clear-space [board space]
+  (assoc board space empty-space))
+
+(defn update-map-entries [m e]
+   (reduce-kv (fn [r k v] (assoc r k v)) m e))
+
+; note: there has to be a better way to do this...
+(defn clear-spaces [board spaces]
+  (let [empties (repeat (count spaces) :_)
+        new-positions-and-marks (apply hash-map (interleave spaces empties))]
+    (merge board new-positions-and-marks)))
+
 (defn empty-spaces [board]
   (into [] (for [[space value] board :when (= empty-space value)] space)))
 
