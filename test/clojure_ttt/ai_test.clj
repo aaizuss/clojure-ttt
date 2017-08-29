@@ -11,6 +11,12 @@
     3 :_ 4 "c" 5 :_
     6 :_ 7 :_ 8 :_}))
 
+(def x-almost-win-col
+ (into (sorted-map)
+   {0 "x" 1 "c" 2 "c"
+    3 :_ 4 :_ 5 "x"
+    6 "x" 7 :_ 8 :_}))
+
 (def c-almost-win
  (into (sorted-map)
    {0 "x" 1 :_ 2 :_
@@ -40,62 +46,40 @@
 
 (def markers ["c" "x"])
 
-(deftest need-special-early-moves-test
-  (testing "true for 4x4"
-    (is (= true (need-special-early-moves? early-4x4))))
-  (testing "false for 3x3"
-    (is (= false (need-special-early-moves? (board/new-board 3))))))
+; (deftest need-special-early-moves-test
+;   (testing "true for 4x4"
+;     (is (= true (need-special-early-moves? early-4x4))))
+;   (testing "false for 3x3"
+;     (is (= false (need-special-early-moves? (board/new-board 3))))))
 
 (deftest change-turn-test
   (testing "reverses order of markers"
     (is (= ["c" "x"] (change-turn ["x" "c"])))))
 
-(deftest get-ai-move-test
-  (testing "blocks opponent from winning"
-    (is (= 2 (get-ai-move "c" x-almost-win sample-players))))
-  (testing "chooses winning move"
-    (is (= 5 (get-ai-move "c" c-almost-win sample-players)))))
-  ; (testing "chooses winning move on 4x4 board"
-  ;   (is (= 6 (get-ai-move "c" c-almost-win-4x4 sample-players))))
-  ; (testing "blocks opponent from winning 4x4"
-  ;   (is (= 6 (get-ai-move "c" c-almost-lose-4x4 sample-players)))))
+(deftest best-move-and-score-test
+  (testing "returns map with max score for ai player"
+    (is (= [3 8] (best-move-and-score "c" "c" {4 7, 2 4, 3 8}))))
+  (testing "returns map with min score for opponent"
+    (is (= [5 4] (best-move-and-score "x" "c" {4 7, 5 4, 6 8}))))
+  (testing "returns the best move from the map"
+    (is (= 3 (best-move "c" "c" {4 7, 2 4, 3 8})))))
 
-; lol
-(deftest computers-tie-test
-  (testing "computers tie when playing against each other"
-    (let
-      [new-board (board/new-board 3)
-       c-move-1 (get-ai-move "c" new-board sample-players)
-       board-1 (board/mark-space new-board c-move-1 "c")
-       x-move-1 (get-ai-move "x" board-1 sample-players)
-       board-2 (board/mark-space board-1 x-move-1 "x")
-       c-move-2 (get-ai-move "c" board-2 sample-players)
-       board-3 (board/mark-space board-2 c-move-2 "c")
-       x-move-2 (get-ai-move "x" board-3 sample-players)
-       board-4 (board/mark-space board-3 x-move-2 "x")
-       c-move-3 (get-ai-move "c" board-4 sample-players)
-       board-5 (board/mark-space board-4 c-move-3 "c")
-       x-move-3 (get-ai-move "x" board-5 sample-players)
-       board-6 (board/mark-space board-5 x-move-3 "x")
-       c-move-4 (get-ai-move "c" board-6 sample-players)
-       board-7 (board/mark-space board-6 c-move-4 "c")
-       x-move-4 (get-ai-move "x" board-7 sample-players)
-       board-8 (board/mark-space board-7 x-move-4 "x")
-       c-move-5 (get-ai-move "c" board-8 sample-players)
-       board-9 (board/mark-space board-8 c-move-5 "c")]
-    (is (= true (board/tie? board-9)))))
-  (testing "start from mid game"
-    (let
-      [c-move-4 (get-ai-move "c" x-almost-win sample-players)
-       board-1 (board/mark-space x-almost-win c-move-4 "c")
-       x-move-5 (get-ai-move "x" board-1 sample-players)
-       board-2 (board/mark-space board-1 x-move-5 "x")
-       c-move-6 (get-ai-move "c" board-2 sample-players)
-       board-3 (board/mark-space board-2 c-move-6 "c")
-       x-move-7 (get-ai-move "x" board-3 sample-players)
-       board-4 (board/mark-space board-3 x-move-7 "x")
-       c-move-8 (get-ai-move "c" board-4 sample-players)
-       board-5 (board/mark-space board-4 c-move-8 "c")
-       x-move-9 (get-ai-move "x" board-5 sample-players)
-       board-6 (board/mark-space board-5 x-move-9 "x")]
-    (is (= true (board/tie? board-6))))))
+(deftest get-score-or-move-test
+  (testing "returns best score for computer player while game ongoing"
+    (is (= 8 (get-score-or-move 2 "c" "c" {4 2, 5 1, 3 8}))))
+  (testing "returns best move for computer player"
+    (is (= 3 (get-score-or-move 0 "c" "c" {4 2, 5 1, 3 8}))))
+  (testing "returns best move (min score) for non computer player"
+    (is (= 5 (get-score-or-move 0 "x" "c" {4 2, 5 1, 3 8})))))
+
+(deftest think-fast-test
+  (testing "blocks opponent from winning"
+    (is (= 2 (think-fast {:ai-marker "c" :board x-almost-win :players sample-players}))))
+  (testing "blocks opponent from winning"
+    (is (= 3 (think-fast {:ai-marker "c" :board x-almost-win-col :players sample-players}))))
+  (testing "chooses winning move"
+    (is (= 5 (think-fast {:ai-marker "c" :board c-almost-win :players sample-players})))))
+  ; (testing "chooses winning move on 4x4 board"
+  ;   (is (= 6 (think-fast {:ai-marker "c" :board c-almost-win-4x4 :players sample-players}))))
+  ; (testing "blocks opponent from winning 4x4"
+  ;   (is (= 6 (think-fast {:ai-marker "c" :board c-almost-lose-4x4 :players sample-players})))))
