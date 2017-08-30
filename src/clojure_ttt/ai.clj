@@ -83,8 +83,9 @@
     (if (board/game-over? board)
         (score-game board ai-marker depth)
         (let [player (current-player-marker players)
-              boards (generate-next-boards board player)]
-            (return-score-or-move depth (examine-boards boards players depth alpha beta is-ai ai-marker) is-ai)))))
+              boards (generate-next-boards board player)
+              moves-and-scores (examine-boards boards players depth alpha beta is-ai ai-marker)]
+            (return-score-or-move depth moves-and-scores is-ai)))))
 
 (def think-fast (memoize think))
 (def examine-boards-fast (memoize examine-boards))

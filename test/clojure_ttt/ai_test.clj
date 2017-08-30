@@ -46,31 +46,31 @@
 
 (def markers ["c" "x"])
 
-; (deftest need-special-early-moves-test
-;   (testing "true for 4x4"
-;     (is (= true (need-special-early-moves? early-4x4))))
-;   (testing "false for 3x3"
-;     (is (= false (need-special-early-moves? (board/new-board 3))))))
-
 (deftest change-turn-test
   (testing "reverses order of markers"
     (is (= ["c" "x"] (change-turn ["x" "c"])))))
 
-; (deftest best-move-and-score-test
-;   (testing "returns map with max score for ai player"
-;     (is (= [3 8] (best-move-and-score "c" "c" {4 7, 2 4, 3 8}))))
-;   (testing "returns map with min score for opponent"
-;     (is (= [5 4] (best-move-and-score "x" "c" {4 7, 5 4, 6 8}))))
-;   (testing "returns the best move from the map"
-;     (is (= 3 (best-move "c" "c" {4 7, 2 4, 3 8})))))
-;
-; (deftest get-score-or-move-test
-;   (testing "returns best score for computer player while game ongoing"
-;     (is (= 8 (get-score-or-move 2 "c" "c" {4 2, 5 1, 3 8}))))
-;   (testing "returns best move for computer player"
-;     (is (= 3 (get-score-or-move 0 "c" "c" {4 2, 5 1, 3 8}))))
-;   (testing "returns best move (min score) for non computer player"
-;     (is (= 5 (get-score-or-move 0 "x" "c" {4 2, 5 1, 3 8})))))
+(deftest update-alpha-test
+  (testing "updates alpha when it is the ai turn"
+    (is (= 8 (update-alpha true 4 8))))
+  (testing "does not update alpha when it is not the ai's turn"
+    (is (= 4 (update-alpha true 4 8)))))
+
+(deftest best-move-and-score-test
+  (testing "returns map with max score for ai player"
+    (is (= [3 8] (best-move-and-score true {4 7, 2 4, 3 8}))))
+  (testing "returns map with min score for opponent"
+    (is (= [5 4] (best-move-and-score false {4 7, 5 4, 6 8}))))
+  (testing "returns the best move from the map"
+    (is (= 3 (best-move true {4 7, 2 4, 3 8})))))
+
+(deftest return-score-or-move-test
+  (testing "returns best score for computer player while game ongoing"
+    (is (= 8 (return-score-or-move 2 {4 2, 5 1, 3 8} true))))
+  (testing "returns best move for computer player"
+    (is (= 3 (return-score-or-move 0 {4 2, 5 1, 3 8} true))))
+  (testing "returns best move (min score) for non computer player"
+    (is (= 5 (return-score-or-move 0 {4 2, 5 1, 3 8} false)))))
 
 (deftest think-fast-test
   (testing "blocks opponent from winning"
