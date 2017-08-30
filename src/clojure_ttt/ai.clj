@@ -82,3 +82,16 @@
         depth (count (board/empty-spaces board))
         best-move-and-score (fast-minimax board depth players is-ai ai-marker -1000 1000)]
       (first best-move-and-score)))
+
+; weird negamax thing that also doesn't work
+; (defn choose-move [marker players board alpha beta depth ai-marker]
+;   (if (board/game-over? board)
+;       (* -1 (+ (score-game board ai-marker depth)))
+;       (loop [alpha alpha spaces (board/empty-spaces board)]
+;         (if (or (empty? spaces) (>= alpha beta))
+;             (* -1 alpha)
+;             (let [new-players (change-turn players)
+;                   player (current-player-marker new-players)
+;                   score (choose-move player new-players (board/mark-space board (first spaces) player)
+;                         (* -1 beta) (* -1 alpha) (inc depth) ai-marker)]
+;                 (recur (max score alpha) (rest spaces)))))))
