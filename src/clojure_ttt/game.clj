@@ -71,7 +71,6 @@
     (cond
       (player/is-computer? opponent) (view/get-move-or-undo board move-history)
       (player/is-human? current-player) (view/get-move board)
-      ; (player/is-computer? current-player) (ai/get-ai-move current-player-marker board player-markers))))
       (player/is-computer? current-player) (ai/choose-move current-player-marker board player-markers))))
 
 (defn undo-moves [board move-history current-player opponent]

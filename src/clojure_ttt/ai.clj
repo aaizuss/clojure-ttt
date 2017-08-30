@@ -39,25 +39,16 @@
 (defn prune? [alpha beta]
   (>= alpha beta))
 
-(defn stop-search? [boards alpha beta]
-  (or (prune? alpha beta) (empty? boards)))
+(defn stop-search? [possibilities alpha beta]
+  (or (prune? alpha beta) (empty? possibilities)))
 
-(defn find-max-or-min
-  [compare current-best move-and-score possible-move]
-    (if (compare (second current-best) (second move-and-score))
-      (vector possible-move (second move-and-score))
-      current-best))
-
-; corresponds to lines 7 and 15 in https://en.wikipedia.org/wiki/Alpha-beta_pruning
-; but it might not be associating the move with the space correctly...
-(defn best-move-and-score
-  [is-ai current-best move-and-score possible-move]
-    (if is-ai
-      (find-max-or-min < current-best move-and-score possible-move)
-      (find-max-or-min > current-best move-and-score possible-move)))
+(defn update-value [is-ai space-val possible-space-val]
+  (if is-ai
+    ())
 
 (declare fast-minimax)
 
+; idea: separately build map of moves and scores
 (defn minimax [board depth players is-ai ai-marker alpha beta]
   (if (or (= depth 0) (board/game-over? board))
       [0 (score-game board ai-marker depth)]
@@ -68,7 +59,7 @@
                 beta beta]
           (let [marked-board (board/mark-space board space (current-player-marker players))
                 move-and-score (fast-minimax marked-board (dec depth) (change-turn players) (not is-ai) ai-marker alpha beta)
-                new-move-and-score (best-move-and-score is-ai best-move-score move-and-score space)
+                new-move-and-score ;(if is-ai max best-move-score and move-and-score that we just found) otherwise min
                 new-alpha (update-alpha is-ai new-move-and-score alpha)
                 new-beta (update-beta is-ai new-move-and-score beta)]
             (if (stop-search? rest new-alpha new-beta)
@@ -82,16 +73,3 @@
         depth (count (board/empty-spaces board))
         best-move-and-score (fast-minimax board depth players is-ai ai-marker -1000 1000)]
       (first best-move-and-score)))
-
-; weird negamax thing that also doesn't work
-; (defn choose-move [marker players board alpha beta depth ai-marker]
-;   (if (board/game-over? board)
-;       (* -1 (+ (score-game board ai-marker depth)))
-;       (loop [alpha alpha spaces (board/empty-spaces board)]
-;         (if (or (empty? spaces) (>= alpha beta))
-;             (* -1 alpha)
-;             (let [new-players (change-turn players)
-;                   player (current-player-marker new-players)
-;                   score (choose-move player new-players (board/mark-space board (first spaces) player)
-;                         (* -1 beta) (* -1 alpha) (inc depth) ai-marker)]
-;                 (recur (max score alpha) (rest spaces)))))))
