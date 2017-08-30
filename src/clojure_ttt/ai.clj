@@ -1,7 +1,6 @@
 (ns clojure-ttt.ai
   (:require [clojure-ttt.board :as board]))
 
-(declare think think-fast)
 (def max-depth 7)
 
 (defn change-turn [markers]
@@ -28,82 +27,64 @@
     (opponent-win? board ai-marker) (- depth 10)
     :else 0))
 
+(defn init-move-and-score [is-ai]
+  (if is-ai [0 -1000] [0 1000]))
+
+(defn update-alpha [is-ai best-move-and-score alpha]
+  (if is-ai (max (second best-move-and-score) alpha) alpha))
+
+(defn update-beta [is-ai best-move-and-score beta]
+  (if (not is-ai) (min (second best-move-and-score) beta) beta))
+
+(defn prune? [alpha beta]
+  (>= alpha beta))
+
+(defn stop-search? [boards alpha beta]
+  (or (prune? alpha beta) (empty? boards)))
+
 (defn generate-next-boards [board marker]
   (let [spaces (board/empty-spaces board)
         boards (map #(board/mark-space board % marker) spaces)]
     (map #(assoc {} :board %1 :move %2) boards spaces)))
 
-(defn examine-board-states-max [boards moves-and-scores players depth alpha beta ai-marker is-ai]
-  (let [new-players (change-turn players)
-        board (:board (first boards))
-        move (:move (first boards))
-        new-score (think-fast {:board board
-                          :depth (inc depth)
-                          :alpha alpha
-                          :beta beta
-                          :players new-players
-                          :is-ai false
-                          :ai-marker ai-marker})
-        new-alpha (max alpha new-score)
-        new-moves-and-scores (assoc moves-and-scores move new-score)]
-    (if (or (<= beta new-alpha) (empty? (rest boards)))
-        new-moves-and-scores ;short circuit
-        ; continue working through the possible board states
-        (recur (rest boards) new-moves-and-scores players depth new-alpha beta ai-marker is-ai))))
+(defn find-max-or-min
+  [max-or-min is-ai current-best move-and-score possible-move]
+    (if (max-or-min (second current-best) (second move-and-score))
+      (vector possible-move (second move-and-score))
+      current-best))
 
-(defn examine-board-states-min [boards moves-and-scores players depth alpha beta ai-marker is-ai]
-  (let [new-players (change-turn players)
-        board (:board (first boards))
-        move (:move (first boards))
-        new-score (think-fast {:board board :players new-players
-                          :depth (inc depth)
-                          :alpha alpha :beta beta :is-ai true :ai-marker ai-marker})
-        new-beta (min beta new-score)
-        new-moves-and-scores (assoc moves-and-scores move new-score)]
-    (if (or (<= new-beta alpha) (empty? (rest boards)))
-        new-moves-and-scores
-        (recur (rest boards) new-moves-and-scores players depth alpha new-beta ai-marker is-ai))))
-
-(defn build-moves-and-scores
-  [{:keys [moves-and-scores boards players depth alpha beta is-ai ai-marker]
-    :or {moves-and-scores {}}}]
+(defn best-move-and-score
+  [is-ai current-best move-and-score possible-move]
     (if is-ai
-      (examine-board-states-max boards moves-and-scores players depth alpha beta ai-marker is-ai)
-      (examine-board-states-min boards moves-and-scores players depth alpha beta ai-marker is-ai)))
+      (find-max-or-min < is-ai current-best move-and-score possible-move)
+      (find-max-or-min > is-ai current-best move-and-score possible-move)))
 
-(defn best-move-and-score [player ai-marker moves-and-scores]
-  (if (ai? player ai-marker)
-      (apply max-key val moves-and-scores)
-      (apply min-key val moves-and-scores)))
+(declare fast-minimax)
 
-(defn best-score [player ai-marker moves-and-scores]
-  (val (best-move-and-score player ai-marker moves-and-scores)))
+(defn minimax [board depth players is-ai ai-marker alpha beta]
+  (if (board/game-over? board)
+      [0 (score-game board ai-marker depth)]
+      (do
+        (loop [;[board-state & rest-of-boards] (generate-next-boards board (current-player-marker players))
+                [space & rest] (board/empty-spaces board)
+                best-move-score (init-move-and-score is-ai)
+                alpha alpha
+                beta beta]
+          (let [;the-board (:board board-state)
+                the-board (board/mark-space board space (current-player-marker players))
+                ;the-move (:move board-state)
+                move-and-score (fast-minimax the-board (dec depth) (change-turn players) (not is-ai) ai-marker alpha beta)
+                new-move-and-score (best-move-and-score is-ai best-move-score move-and-score space)
+                new-alpha (update-alpha is-ai new-move-and-score alpha)
+                new-beta (update-beta is-ai new-move-and-score beta)]
+            (if (stop-search? rest new-alpha new-beta)
+                new-move-and-score
+                (recur rest new-move-and-score new-alpha new-beta)))))))
 
-(defn best-move [player ai-marker moves-and-scores]
-  (key (best-move-and-score player ai-marker moves-and-scores)))
+(def fast-minimax (memoize minimax))
 
-(defn get-score-or-move [depth player ai-marker moves-and-scores]
-  (if (= 0 depth)
-      (best-move player ai-marker moves-and-scores)
-      (best-score player ai-marker moves-and-scores)))
-
-; i think the problem is the way i analyze the moves-and-scores/how i recur but
-; i can't figure it out :(
-(defn think [{:keys [board ai-marker depth alpha beta players is-ai]
-                :or {depth 0, alpha -1000, beta 1000, is-ai true}}]
-  (if (or (> depth max-depth) (board/game-over? board))
-      (score-game board ai-marker depth)
-      (let [player (current-player-marker players)
-            boards (generate-next-boards board player)
-            moves-and-scores (build-moves-and-scores
-                              {:boards boards
-                               :players players
-                               :depth depth
-                               :is-ai is-ai
-                               :ai-marker ai-marker
-                               :alpha alpha
-                               :beta beta})]
-        ;(println (str "depth: " depth " player " player "\nmoves-and-scores: " moves-and-scores))
-        (get-score-or-move depth player ai-marker moves-and-scores))))
-
-(def think-fast (memoize think))
+(defn choose-move [ai-marker board players]
+  (let [is-ai true
+        depth (count (board/empty-spaces board))
+        best-move-and-score (fast-minimax board depth players is-ai ai-marker -1000 1000)]
+      (first best-move-and-score)))
