@@ -72,13 +72,13 @@
 ;   (testing "returns best move (min score) for non computer player"
 ;     (is (= 5 (get-score-or-move 0 "x" "c" {4 2, 5 1, 3 8})))))
 
-(deftest choose-move-test
+(deftest think-fast-test
   (testing "blocks opponent from winning"
-    (is (= 2 (choose-move "c" x-almost-win sample-players))))
+    (is (= 2 (think-fast x-almost-win "c" sample-players))))
   (testing "blocks opponent from winning"
-    (is (= 3 (choose-move "c" x-almost-win-col sample-players))))
+    (is (= 3 (think-fast x-almost-win-col "c" sample-players))))
   (testing "chooses winning move"
-    (is (= 5 (choose-move "c" c-almost-win sample-players)))))
+    (is (= 5 (think-fast c-almost-win "c" sample-players)))))
   ; (testing "chooses winning move on 4x4 board"
   ;   (is (= 6 (think-fast {:ai-marker "c" :board c-almost-win-4x4 :players sample-players}))))
   ; (testing "blocks opponent from winning 4x4"
