@@ -15,6 +15,12 @@
     3 :_ 4 :_ 5 "x"
     6 "x" 7 :_ 8 :_}))
 
+(def bad-first-c-move
+ (into (sorted-map)
+   {0 :_ 1 :_ 2 "x"
+    3 :_ 4 :_ 5 :_
+    6 "x" 7 :_ 8 "c"}))
+
 (def c-almost-win
  (into (sorted-map)
    {0 "x" 1 :_ 2 "x"
@@ -67,7 +73,9 @@
 
 (deftest minimax-test
   (testing "when start depth is 3 and ai about to win")
-    (is (= [1 12] (minimax easy-board 3 ["c" "x"] true "c" -1000 1000))))
+    (is (= [1 12] (minimax easy-board 3 ["c" "x"] true "c" -1000 1000)))
+  (testing "when start depth is 2 and ai can win or lose")
+    (is (= [6 11] (minimax win-or-lose 2 ["c" "x"] true "c" -1000 1000))))
 
 (deftest update-best-move-score-test
   (testing "chooses max move and score pair for ai"
@@ -80,6 +88,8 @@
     (is (= 2 (choose-move "c" x-almost-win markers))))
   (testing "blocks opponent from winning"
     (is (= 3 (choose-move "c" x-almost-win-col markers))))
+  (testing "blocks opponent from winning even though it will ultimately lose"
+    (is (= 4 (choose-move "c" bad-first-c-move markers))))
   (testing "2 options, one to win one to lose"
     (is (= 6 (choose-move "c" win-or-lose markers))))
   (testing "chooses winning move"

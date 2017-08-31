@@ -71,6 +71,7 @@
 (declare fast-minimax)
 
 ; it always chooses 8 for its first move (when it goes second) and i don't know why
+; when c goes second, it chooses 8, which means it will lose
 (defn minimax [board depth players is-ai ai-marker alpha beta]
   (if (or (= depth 0) (board/game-over? board))
       [-1 (score-game board ai-marker depth)]
