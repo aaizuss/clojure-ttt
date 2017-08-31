@@ -50,6 +50,12 @@
   (testing "reverses order of markers"
     (is (= ["c" "x"] (change-turn ["x" "c"])))))
 
+(deftest update-best-move-score-test
+  (testing "chooses max move and score pair for ai"
+    (is (= [4 7] (update-best-move-score true [4 7] [6 5] 2))))
+  (testing "chooses min move and score pair (based on score) for opponent"
+    (is (= [1 5] (update-best-move-score false [4 7] [6 5] 1)))))
+
 (deftest choose-move-test
   (testing "blocks opponent from winning"
     (is (= 2 (choose-move "c" x-almost-win sample-players))))

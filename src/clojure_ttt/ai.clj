@@ -52,9 +52,9 @@
 (defn opponent-build-move-score-pair [best-move-and-score minimax-result possible-move]
   (let [best-score (second best-move-and-score)
         minimax-score (second minimax-result)]
-    (if (> best-score minimax-score)
-        (vector possible-move minimax-score)
-        best-move-and-score)))
+    (if (< best-score minimax-score)
+        best-move-and-score
+        (vector possible-move minimax-score))))
 
 (defn update-best-move-score [is-ai best-move-and-score minimax-result possible-move]
   (if is-ai
@@ -66,7 +66,7 @@
 ; idea: separately build map of moves and scores?? (pass it into loop)
 (defn minimax [board depth players is-ai ai-marker alpha beta]
   (if (or (= depth 0) (board/game-over? board))
-      [0 (score-game board ai-marker depth)]
+      [-1 (score-game board ai-marker depth)]
       (do
         (loop [[space & rest] (board/empty-spaces board)
                 best-move-score (init-move-and-score is-ai)
