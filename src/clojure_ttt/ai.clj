@@ -96,8 +96,24 @@
 
 (def fast-minimax (memoize minimax))
 
+(def num-spaces-big-board 16)
+(defn big-board? [board]
+  (= num-spaces-big-board (board/num-spaces board)))
+(def big-board-corners '(0 3 12 15))
+
+(defn need-special-early-moves? [board]
+  (if (and (big-board? board) (> (board/num-empty-spaces board) 12))
+       true
+       false))
+
+(defn choose-from-corners [board]
+  (let [corners (filter #(not (board/marked? board %)) big-board-corners)]
+    (rand-nth corners)))
+
 (defn choose-move [ai-marker board players]
-  (let [is-ai true
-        depth (count (board/empty-spaces board))
-        best-move-and-score (fast-minimax board depth players is-ai ai-marker -1000 1000)]
-      (first best-move-and-score)))
+  (if (need-special-early-moves? board)
+      (choose-from-corners board)
+      (let [is-ai true
+            depth (count (board/empty-spaces board))
+            best-move-and-score (fast-minimax board depth players is-ai ai-marker -1000 1000)]
+          (first best-move-and-score))))
