@@ -73,9 +73,9 @@
   (testing "reverses order of markers"
     (is (= ["c" "x"] (change-turn ["x" "c"])))))
 
-; (deftest minimax-test
-;   (testing "when start depth is 3 and ai about to win")
-;     (is (= [1 12] (minimax easy-board 3 ["c" "x"] true "c" -1000 1000))))
+(deftest minimax-test
+  (testing "when start depth is 3 and ai about to win")
+    (is (= [1 12] (minimax easy-board 3 ["c" "x"] true "c" -1000 1000))))
 
 (deftest minimax-test
   (testing "when start depth is 3 and ai about to win")
