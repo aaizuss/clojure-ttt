@@ -42,13 +42,29 @@
 (defn stop-search? [possibilities alpha beta]
   (or (prune? alpha beta) (empty? possibilities)))
 
-(defn update-value [is-ai space-val possible-space-val]
+(defn ai-build-move-score-pair [best-move-and-score minimax-result possible-move]
+  (let [best-score (second best-move-and-score)
+        minimax-score (second minimax-result)]
+    (if (> best-score minimax-score)
+        best-move-and-score
+        (vector possible-move minimax-score))))
+        minimax-result)))
+
+(defn opponent-build-move-score-pair [best-move-and-score minimax-result possible-move]
+  (let [best-score (second best-move-and-score)
+        minimax-score (second minimax-result)]
+    (if (> best-score minimax-score)
+        best-move-and-score
+        (vector possible-move minimax-score))))
+
+(defn update-best-move-score [is-ai best-move-and-score minimax-result possible-move]
   (if is-ai
-    ())
+    (ai-build-move-score-pair best-move-and-score minimax-result possible-move)
+    (opponent-build-move-score-pair best-move-and-score minimax-result possible-move)))
 
 (declare fast-minimax)
 
-; idea: separately build map of moves and scores
+; idea: separately build map of moves and scores?? (pass it into loop)
 (defn minimax [board depth players is-ai ai-marker alpha beta]
   (if (or (= depth 0) (board/game-over? board))
       [0 (score-game board ai-marker depth)]
@@ -58,8 +74,8 @@
                 alpha alpha
                 beta beta]
           (let [marked-board (board/mark-space board space (current-player-marker players))
-                move-and-score (fast-minimax marked-board (dec depth) (change-turn players) (not is-ai) ai-marker alpha beta)
-                new-move-and-score ;(if is-ai max best-move-score and move-and-score that we just found) otherwise min
+                minimax-move-score (fast-minimax marked-board (dec depth) (change-turn players) (not is-ai) ai-marker alpha beta)
+                new-move-and-score (update-best-move-score is-ai best-move-score minimax-move-score space)
                 new-alpha (update-alpha is-ai new-move-and-score alpha)
                 new-beta (update-beta is-ai new-move-and-score beta)]
             (if (stop-search? rest new-alpha new-beta)
