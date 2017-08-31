@@ -89,6 +89,32 @@
   (testing "chooses min move and score pair (based on score) for opponent"
     (is (= [1 5] (update-best-move-score false [4 7] [6 5] 1)))))
 
+(deftest choose-4-test
+  (testing "ai move after opponent chooses top left corner"
+    (is (= 4 (choose-move "c"
+     (into (sorted-map)
+       {0 "x" 1 :_ 2 :_
+        3 :_ 4 :_ 5 :_
+        6 :_ 7 :_ 8 :_}) markers))))
+  (testing "ai move after opponent chooses top right corner"
+    (is (= 4 (choose-move "c"
+     (into (sorted-map)
+       {0 :_ 1 :_ 2 "x"
+        3 :_ 4 :_ 5 :_
+        6 :_ 7 :_ 8 :_}) markers))))
+  (testing "ai move after opponent chooses bottom left corner"
+    (is (= 4 (choose-move "c"
+     (into (sorted-map)
+       {0 :_ 1 :_ 2 :_
+        3 :_ 4 :_ 5 :_
+        6 "x" 7 :_ 8 :_}) markers))))
+  (testing "ai move after opponent chooses bottom right corner"
+    (is (= 4 (choose-move "c"
+     (into (sorted-map)
+       {0 :_ 1 :_ 2 :_
+        3 :_ 4 :_ 5 :_
+        6 :_ 7 :_ 8 "x"}) markers)))))
+
 (deftest choose-move-test
   (testing "blocks opponent from winning"
     (is (= 2 (choose-move "c" x-almost-win markers))))
