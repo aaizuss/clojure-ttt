@@ -21,10 +21,17 @@
 (defn opponent-win? [board ai-marker]
   (not= ai-marker (board/get-winner board)))
 
+; depth is like number of turns
+; but i start with depth being number of spaces left - smaller as game goes on
+; more turns should be lower score, so we add depth
+; fewer turns should be better score (higher)
+; so higher depth should be higher score (high depth means fewer turns when we decrease depth)
+; each time invoke minimax, depth decremented by one
+; needs to be 0 sum!!
 (defn score-game [board ai-marker depth]
   (cond
-    (ai-win? board ai-marker) (- 10 depth)
-    (opponent-win? board ai-marker) (- depth 10)
+    (ai-win? board ai-marker) (+ 10 depth)
+    (opponent-win? board ai-marker) (- (+ 10 depth))
     :else 0))
 
 (defn init-move-and-score [is-ai]
@@ -63,7 +70,7 @@
 
 (declare fast-minimax)
 
-; idea: separately build map of moves and scores?? (pass it into loop)
+; it always chooses 8 for its first move (when it goes second) and i don't know why
 (defn minimax [board depth players is-ai ai-marker alpha beta]
   (if (or (= depth 0) (board/game-over? board))
       [-1 (score-game board ai-marker depth)]
