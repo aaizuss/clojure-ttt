@@ -9,6 +9,12 @@
     3 :_ 4 "c" 5 :_
     6 :_ 7 :_ 8 :_}))
 
+(def almost-full-block
+ (into (sorted-map)
+   {0 "x" 1 "x" 2 "c"
+    3 :_ 4 :_ 5 "x"
+    6 "x" 7 "c" 8 "c"}))
+
 (def x-almost-win-col
  (into (sorted-map)
    {0 "x" 1 "c" 2 "c"
@@ -86,6 +92,8 @@
 (deftest choose-move-test
   (testing "blocks opponent from winning"
     (is (= 2 (choose-move "c" x-almost-win markers))))
+  (testing "blocks opponent from winning (options are ultimately lose or tie)"
+    (is (= 3 (choose-move "c" almost-full-block markers))))
   (testing "blocks opponent from winning"
     (is (= 3 (choose-move "c" x-almost-win-col markers))))
   (testing "blocks opponent from winning even though it will ultimately lose"
@@ -95,8 +103,8 @@
   (testing "chooses winning move"
     (is (= 1 (choose-move "c" easy-board markers))))
   (testing "chooses winning move"
-    (is (= 5 (choose-move "c" c-almost-win markers)))))
-  ; (testing "chooses winning move on 4x4 board"
-  ;   (is (= 6 (choose-move "c" c-almost-win-4x4 markers))))
-  ; (testing "blocks opponent from winning 4x4"
-  ;   (is (= 6 (choose-move "c" c-almost-lose-4x4 markers)))))
+    (is (= 5 (choose-move "c" c-almost-win markers))))
+  (testing "chooses winning move on 4x4 board"
+    (is (= 6 (choose-move "c" c-almost-win-4x4 markers))))
+  (testing "blocks opponent from winning 4x4"
+    (is (= 6 (choose-move "c" c-almost-lose-4x4 markers)))))

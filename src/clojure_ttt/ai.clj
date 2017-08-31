@@ -52,14 +52,14 @@
 (defn ai-build-move-score-pair [best-move-and-score minimax-result possible-move]
   (let [best-score (second best-move-and-score)
         minimax-score (second minimax-result)]
-    (if (> best-score minimax-score)
+    (if (>= best-score minimax-score)
         best-move-and-score
         (vector possible-move minimax-score))))
 
 (defn opponent-build-move-score-pair [best-move-and-score minimax-result possible-move]
   (let [best-score (second best-move-and-score)
         minimax-score (second minimax-result)]
-    (if (< best-score minimax-score)
+    (if (<= best-score minimax-score)
         best-move-and-score
         (vector possible-move minimax-score))))
 
@@ -72,6 +72,7 @@
 
 ; it always chooses 8 for its first move (when it goes second) and i don't know why
 ; when c goes second, it chooses 8, which means it will lose
+; the challenge: making sure i keep track of the moves properly so the returned move actually makes sense
 (defn minimax [board depth players is-ai ai-marker alpha beta]
   (if (or (= depth 0) (board/game-over? board))
       [-1 (score-game board ai-marker depth)]
@@ -79,15 +80,19 @@
         (loop [[space & rest] (board/empty-spaces board)
                 best-move-score (init-move-and-score is-ai)
                 alpha alpha
-                beta beta]
+                beta beta
+                moves-and-scores []]
           (let [marked-board (board/mark-space board space (current-player-marker players))
                 minimax-move-score (fast-minimax marked-board (dec depth) (change-turn players) (not is-ai) ai-marker alpha beta)
                 new-move-and-score (update-best-move-score is-ai best-move-score minimax-move-score space)
                 new-alpha (update-alpha is-ai new-move-and-score alpha)
-                new-beta (update-beta is-ai new-move-and-score beta)]
+                new-beta (update-beta is-ai new-move-and-score beta)
+                new-moves-and-scores (conj moves-and-scores new-move-and-score)]
             (if (stop-search? rest new-alpha new-beta)
+                ; uncomment below for debug help
+                ; (do (println (str "Stopping search: " (current-player-marker players) "  " new-moves-and-scores)) new-move-and-score)
                 new-move-and-score
-                (recur rest new-move-and-score new-alpha new-beta)))))))
+                (recur rest new-move-and-score new-alpha new-beta new-moves-and-scores)))))))
 
 (def fast-minimax (memoize minimax))
 
