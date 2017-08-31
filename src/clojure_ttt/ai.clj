@@ -48,14 +48,13 @@
     (if (> best-score minimax-score)
         best-move-and-score
         (vector possible-move minimax-score))))
-        minimax-result)))
 
 (defn opponent-build-move-score-pair [best-move-and-score minimax-result possible-move]
   (let [best-score (second best-move-and-score)
         minimax-score (second minimax-result)]
     (if (> best-score minimax-score)
-        best-move-and-score
-        (vector possible-move minimax-score))))
+        (vector possible-move minimax-score)
+        best-move-and-score)))
 
 (defn update-best-move-score [is-ai best-move-and-score minimax-result possible-move]
   (if is-ai
