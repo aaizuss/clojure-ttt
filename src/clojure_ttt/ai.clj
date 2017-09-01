@@ -71,19 +71,15 @@
         (loop [[space & rest] (board/empty-spaces board)
                 best-move-score (init-move-and-score is-ai)
                 alpha alpha
-                beta beta
-                moves-and-scores []]
+                beta beta]
           (let [marked-board (board/mark-space board space (current-player-marker players))
                 minimax-move-score (fast-minimax marked-board (dec depth) (change-turn players) (not is-ai) ai-marker alpha beta)
                 new-move-and-score (update-best-move-score is-ai best-move-score minimax-move-score space)
                 new-alpha (update-alpha is-ai new-move-and-score alpha)
-                new-beta (update-beta is-ai new-move-and-score beta)
-                new-moves-and-scores (conj moves-and-scores new-move-and-score)]
+                new-beta (update-beta is-ai new-move-and-score beta)]
             (if (stop-search? rest new-alpha new-beta)
-                ; uncomment below for debugging
-                ; (do (println (str "Space " space "  Stopping search: " (current-player-marker players) "  " new-moves-and-scores)) new-move-and-score)
                 new-move-and-score
-                (recur rest new-move-and-score new-alpha new-beta new-moves-and-scores)))))))
+                (recur rest new-move-and-score new-alpha new-beta)))))))
 
 (def fast-minimax (memoize minimax))
 
