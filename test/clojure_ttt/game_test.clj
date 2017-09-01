@@ -42,6 +42,12 @@
 (def sample-computer-p1
   {:marker "o" :human false :goes-first true})
 
+(def computer-p1
+  {:marker "a" :human false :goes-first true})
+
+(def computer-p2
+  {:marker "b" :human false :goes-first false})
+
 (def sample-human-v-computer
   {:current-player sample-human-p1
    :opponent sample-computer-p2})
@@ -84,3 +90,8 @@
                                           {:board o-close-to-win
                                             :current-player sample-human-o
                                             :opponent sample-human-p1})))))))
+(deftest computer-v-computer-test
+  (with-out-str (testing "computer v computer ends in tie for 3x3 board"
+    (is (= true (board/tie? (game-loop {:board (board/new-board 3) :current-player computer-p1 :opponent computer-p2 :move-history []}))))))
+  (with-out-str (testing "computer v computer ends in tie for 3x3 board"
+    (is (= true (board/tie? (game-loop {:board (board/new-board 4) :current-player computer-p1 :opponent computer-p2 :move-history []})))))))

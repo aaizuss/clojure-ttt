@@ -21,7 +21,6 @@
     (= :cpu-v-human game-type)
       {:current-player (player/stub-computer-first)
        :opponent (player/stub-human-second)}
-    ; raise exception here?
     :else "this can't happen unless game-options names don't match"))
 
 (defn new-board-from-choice [board-choice]
@@ -43,6 +42,9 @@
         player2 (assoc (:opponent incomplete-players) :marker p2-marker)]
       {:current-player player1 :opponent player2}))
 
+(defn- ai-v-ai? [current-player opponent]
+  (and (player/is-computer? current-player) (player/is-computer? opponent)))
+
 (defn player-markers [current-player opponent]
   [(player/get-marker current-player) (player/get-marker opponent)])
 
@@ -57,7 +59,6 @@
     (io/show (renderer/turn-message (player/get-marker current-player)))
     (io/show (renderer/move-history-msg (player/get-marker opponent) (last move-history)))))
 
-; want to edit this so the message is special depending on game type
 (defn show-game-over [board]
   (io/show (renderer/render-board board))
   (if (board/tie? board)
@@ -69,9 +70,10 @@
   (let [player-markers (player-markers current-player opponent)
         current-player-marker (player/get-marker current-player)]
     (cond
+      (ai-v-ai? current-player opponent) (ai/choose-move current-player-marker board player-markers) ; ai v ai
       (player/is-computer? opponent) (view/get-move-or-undo board move-history)
       (player/is-human? current-player) (view/get-move board)
-      (player/is-computer? current-player) (time (ai/choose-move current-player-marker board player-markers)))))
+      (player/is-computer? current-player) (ai/choose-move current-player-marker board player-markers))))
 
 (defn undo-moves [board move-history current-player opponent]
   (let [b1 (board/clear-space board (last move-history))
@@ -100,7 +102,7 @@
         game-state (update-game board move current-player-marker current-player opponent move-history)
         updated-board (:board game-state)]
       (if (board/game-over? updated-board)
-          (show-game-over updated-board)
+          (do (show-game-over updated-board) updated-board)
           (recur game-state))))
 
 (defn play []
