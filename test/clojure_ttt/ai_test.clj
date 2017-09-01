@@ -122,9 +122,8 @@
     (is (= 2 (choose-move "c" x-almost-win markers))))
   (testing "blocks opponent from winning (options are ultimately lose or tie)"
     (is (= 3 (choose-move "c" almost-full-block markers))))
-    ; issue below: it's scoring both moves the same (for opponent) but one is a win
-  ; (testing "blocks opponent who was initially dumb from winning (options are ultimately lose or tie)"
-  ;   (is (= 7 (choose-move "c" almost-full-block-2 markers))))
+  (testing "blocks opponent who was initially dumb from winning (options are ultimately lose or tie)"
+    (is (= 7 (choose-move "c" almost-full-block-2 markers))))
   (testing "blocks opponent from winning"
     (is (= 3 (choose-move "c" x-almost-win-col markers))))
   (testing "blocks opponent from winning even though it will ultimately lose"

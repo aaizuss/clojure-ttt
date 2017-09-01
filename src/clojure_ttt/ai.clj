@@ -23,6 +23,7 @@
 
 (defn score-game [board ai-marker depth]
   (cond
+    (board/tie? board) 0
     (ai-win? board ai-marker) (+ 10 depth)
     (opponent-win? board ai-marker) (- (+ 10 depth))
     :else 0))
