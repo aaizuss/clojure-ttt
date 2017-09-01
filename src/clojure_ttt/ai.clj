@@ -79,8 +79,8 @@
                 new-beta (update-beta is-ai new-move-and-score beta)
                 new-moves-and-scores (conj moves-and-scores new-move-and-score)]
             (if (stop-search? rest new-alpha new-beta)
-                ; uncomment below for debug help
-                ; (do (println (str "Stopping search: " (current-player-marker players) "  " new-moves-and-scores)) new-move-and-score)
+                ; uncomment below for debugging
+                ; (do (println (str "Space " space "  Stopping search: " (current-player-marker players) "  " new-moves-and-scores)) new-move-and-score)
                 new-move-and-score
                 (recur rest new-move-and-score new-alpha new-beta new-moves-and-scores)))))))
 
