@@ -109,3 +109,11 @@
 
 (defn game-over? [board]
   (or (has-winner? board) (tie? board)))
+
+; for saving to database
+(defn space-string [[index marker]]
+  (if (= marker empty-space) "_" marker))
+
+(defn flat-string [board]
+  (let [board-vector (to-indexed-vec board)]
+    (apply str (map space-string board-vector))))

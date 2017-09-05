@@ -251,3 +251,10 @@
     (is (= false (game-over? marked-board))))
   (testing "true when there is a winner"
     (is (= true (game-over? col-2-winner)))))
+
+(deftest flat-string-test
+  (testing "blank 3x3 board"
+    ;(is (= "012345678" (flat-string blank-board))))
+    (is (= "_________" (flat-string blank-board))))
+  (testing "marked 3x3 board"
+    (is (= "x___o___x" (flat-string marked-board)))))
