@@ -4,7 +4,8 @@
             [clojure-ttt.io :as io]
             [clojure-ttt.string-renderer :as renderer]
             [clojure-ttt.player :as player]
-            [clojure-ttt.ai :as ai]))
+            [clojure-ttt.ai :as ai]
+            [clojure-ttt.game-db :as game-db]))
 
 (def game-options {:1 :human-v-human :2 :human-v-cpu :3 :cpu-v-human})
 (def board-options {:3 :3x3 :4 :4x4})
@@ -88,12 +89,14 @@
 (defn update-game [board move marker current-player opponent move-history]
   (if (= move undo)
       (undo-moves board move-history current-player opponent)
-      (let [marked-board (board/mark-space board move marker)
-            new-history (conj move-history move)]
-        {:board marked-board
-         :current-player opponent
-         :opponent current-player
-         :move-history new-history})))
+      (do
+        (game-db/update-db board current-player move)
+        (let [marked-board (board/mark-space board move marker)
+              new-history (conj move-history move)]
+          {:board marked-board
+           :current-player opponent
+           :opponent current-player
+           :move-history new-history}))))
 
 (defn game-loop [{:keys [board current-player opponent move-history]}]
   (show-pre-move-info board current-player opponent move-history)
