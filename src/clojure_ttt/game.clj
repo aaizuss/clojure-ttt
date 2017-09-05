@@ -90,7 +90,7 @@
   (if (= move undo)
       (undo-moves board move-history current-player opponent)
       (do
-        (game-db/update-db board current-player move)
+        (game-db/update-db board current-player opponent move)
         (let [marked-board (board/mark-space board move marker)
               new-history (conj move-history move)]
           {:board marked-board
