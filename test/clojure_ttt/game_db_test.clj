@@ -13,7 +13,7 @@
 
 (deftest game-sql-test
   (testing "generates sql to create game table"
-    (is (= "CREATE TABLE game (state VARCHAR(9) NOT NULL, turn VARCHAR(1) NOT NULL, moves integer[], PRIMARY KEY (state, turn))" (with-out-str (print game-sql))))))
+    (is (= "CREATE TABLE game (state VARCHAR(16) NOT NULL, turn VARCHAR(1) NOT NULL, moves integer[], PRIMARY KEY (state, turn))" (with-out-str (print game-sql))))))
 
 (deftest board-state-test
   (testing "p1 is A and p2 is B"

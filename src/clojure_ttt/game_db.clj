@@ -23,7 +23,7 @@
     (string/replace p1-board (re-pattern p2-marker) (generic-marker player2))))
 
 ; to create a table called game
-(def game-sql (jdbc/create-table-ddl :game [[:state "VARCHAR(9) NOT NULL"]
+(def game-sql (jdbc/create-table-ddl :game [[:state "VARCHAR(16) NOT NULL"]
                                           [:turn "VARCHAR(1) NOT NULL"]
                                           [:moves "integer[]"]
                                           ["PRIMARY KEY" "(state, turn)"]]))
