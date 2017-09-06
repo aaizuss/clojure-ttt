@@ -5,10 +5,11 @@
             [clojure.string :as string]))
 
 (def dbname "ttt_experiment")
+(def host "localhost")
 
 (def db {:dbtype "postgresql"
          :dbname dbname
-         :host "localhost"
+         :host host
          :user "amandaaizuss"})
 
 (defn generic-marker [player]
@@ -22,26 +23,27 @@
     (string/replace p1-board (re-pattern p2-marker) (generic-marker player2))))
 
 ; to create a table called game
-(def game-sql (jdbc/create-table-ddl :game [[:game_id :serial "PRIMARY KEY"]
-                                          [:state "VARCHAR(9)"]
-                                          [:turn "VARCHAR(1)"]
-                                          [:move "integer"]]))
+(def game-sql (jdbc/create-table-ddl :game [[:state "VARCHAR(9) NOT NULL"]
+                                          [:turn "VARCHAR(1) NOT NULL"]
+                                          [:moves "integer[]"]
+                                          ["PRIMARY KEY" "(state, turn)"]]))
 
-; what happens if i try to insert a game where the state
-; already exists...
-; i could just have lots of repeat states
-; then to see moves, do
-; SELECT moves FROM game WHERE state = '__x_o____' AND turn = 'x';
-; and can find max count
-(defn insert-record [board-state turn move]
-  (jdbc/insert! db :game {:state board-state :turn turn :move move}))
+; raw sql for upsert
+; INSERT INTO game VALUES ('_________', 'x', '{8}') ON CONFLICT (state, turn)
+; DO UPDATE SET moves = game.moves || excluded.moves;
+(defn- execute-change [board-state turn move]
+  (let [quoted-turn (str "'" turn "', ")
+        quoted-board (str "'" board-state "', ")
+        quoted-move (str "'{" move "}'")
+        formatted-values (str "(" quoted-board quoted-turn quoted-move ") ")
+        command (str "insert into game values " formatted-values "on conflict (state, turn) do update set moves = game.moves || excluded.moves")]
+    (jdbc/execute! db [command])))
 
 (defn update-db [board player1 player2 move]
-  (insert-record (board-state board player1 player2) (generic-marker player1) move))
+  (let [board-state (board-state board player1 player2)
+        turn (generic-marker player1)]
+      (execute-change board-state turn move)))
 
-; this returns a table with the count and move
-(defn count-moves [board-state turn]
-  (jdbc/query db [(str "SELECT count(*), move FROM game WHERE state = " board-state " AND turn = " turn " group by move order by count(*) desc limit 1")]))
-
-; sequence of moves for specific board
-;(jdbc/query db ["SELECT move FROM game WHERE state = _________ AND turn = 'x'"] {:row-fn :move})
+; select state, move, count(*) as count from game, unnest(game.moves) as move group by 1,2 order by 1,3 desc;
+(def count-moves
+  (jdbc/query db ["select state, move, count(*) as count from game, unnest(game.moves) as move group by 1,2 order by 1,3 desc"]))
