@@ -28,10 +28,7 @@
                                           [:moves "integer[]"]
                                           ["PRIMARY KEY" "(state, turn)"]]))
 
-; raw sql for upsert
-; INSERT INTO game VALUES ('_________', 'x', '{8}') ON CONFLICT (state, turn)
-; DO UPDATE SET moves = game.moves || excluded.moves;
-(defn- execute-change [board-state turn move]
+(defn- upsert [board-state turn move]
   (let [quoted-turn (str "'" turn "', ")
         quoted-board (str "'" board-state "', ")
         quoted-move (str "'{" move "}'")
@@ -42,8 +39,7 @@
 (defn update-db [board player1 player2 move]
   (let [board-state (board-state board player1 player2)
         turn (generic-marker player1)]
-      (execute-change board-state turn move)))
+      (upsert board-state turn move)))
 
-; select state, move, count(*) as count from game, unnest(game.moves) as move group by 1,2 order by 1,3 desc;
 (def count-moves
   (jdbc/query db ["select state, move, count(*) as count from game, unnest(game.moves) as move group by 1,2 order by 1,3 desc"]))
