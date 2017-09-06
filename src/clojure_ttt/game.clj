@@ -58,7 +58,9 @@
   (io/show (renderer/render-board board))
   (if (empty? move-history)
     (io/show (renderer/turn-message (player/get-marker current-player)))
-    (io/show (renderer/move-history-msg (player/get-marker opponent) (last move-history)))))
+    (do
+      (io/show (renderer/turn-message (player/get-marker current-player)))
+      (io/show (renderer/move-history-msg (player/get-marker opponent) (last move-history))))))
 
 (defn show-game-over [board]
   (io/show (renderer/render-board board))
