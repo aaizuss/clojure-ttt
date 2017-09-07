@@ -43,23 +43,13 @@
     (jdbc/execute! db [command])))
 
 (defn full-table []
-  (jdbc/query db ["select * from table"]))
+  (jdbc/query db ["select * from game"]))
 
 (defn connected? []
-  (do
-    true
-    (try
-      (full-table)
-      (catch org.postgresql.util.PSQLException e
-        false))))
+  (let [result (try (full-table) (catch org.postgresql.util.PSQLException e false))]
+    (if result true result)))
 
 (defn update-db [board player1 player2 move]
   (let [board-state (board-state board player1 player2)
         turn (generic-marker player1)]
       (upsert board-state turn move)))
-
-; (defn update-db-if-up [board player1 player2 move]
-;   (try
-;     (update-db board player1 player2 move)
-;     (catch org.postgresql.util.PSQLException _
-;       (prn "db down!!"))))
