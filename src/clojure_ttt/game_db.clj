@@ -42,13 +42,24 @@
         command (str "insert into game values " formatted-values "on conflict (state, turn) do update set moves = game.moves || excluded.moves")]
     (jdbc/execute! db [command])))
 
+(defn full-table []
+  (jdbc/query db ["select * from table"]))
+
+(defn connected? []
+  (do
+    true
+    (try
+      (full-table)
+      (catch org.postgresql.util.PSQLException e
+        false))))
+
 (defn update-db [board player1 player2 move]
   (let [board-state (board-state board player1 player2)
         turn (generic-marker player1)]
       (upsert board-state turn move)))
 
-(defn update-db-if-up [board player1 player2 move]
-  (try
-    (update-db board player1 player2 move)
-    (catch org.postgresql.util.PSQLException _
-      (prn "db down!!"))))
+; (defn update-db-if-up [board player1 player2 move]
+;   (try
+;     (update-db board player1 player2 move)
+;     (catch org.postgresql.util.PSQLException _
+;       (prn "db down!!"))))
