@@ -2,15 +2,27 @@
   (:require [clojure.java.jdbc :as jdbc]
             [clojure-ttt.player :as player]
             [clojure-ttt.board :as board]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [ragtime.jdbc :as ragtime]
+            [ragtime.repl :as repl]))
 
 (def dbname "ttt_experiment")
 (def host "localhost")
 
+
 (def db {:dbtype "postgresql"
          :dbname dbname
-         :host host
-         :user "amandaaizuss"})
+         :host host})
+
+(defn load-config []
+  {:datastore (ragtime/sql-database db)
+   :migrations (ragtime/load-resources "migrations")})
+
+(defn migrate []
+  (repl/migrate (load-config)))
+
+(defn rollback []
+  (repl/rollback (load-config)))
 
 (defn generic-marker [player]
   (if (player/goes-first? player) "x" "o"))
@@ -41,5 +53,5 @@
         turn (generic-marker player1)]
       (upsert board-state turn move)))
 
-(def count-moves
-  (jdbc/query db ["select state, move, count(*) as count from game, unnest(game.moves) as move group by 1,2 order by 1,3 desc"]))
+; (def count-moves
+;   (jdbc/query db ["select state, move, count(*) as count from game, unnest(game.moves) as move group by 1,2 order by 1,3 desc"]))
