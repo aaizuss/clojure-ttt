@@ -11,8 +11,8 @@ Learning clojure by writing a simple command line tic tac toe.
 ## Database Setup
 the game saves moves to a PostgreSQL database, which requires you to have
 a PostgreSQL database running locally
-* Install [PostgreSQL](https://www.postgresql.org/download/) - I recommend following these instructions and configuring your `$PATH` to use the command line tools: [postgrespp](https://postgresapp.com/)
-* On the command line, enter `psql postgres`
+* Install [PostgreSQL](https://www.postgresql.org/download/)
+* Launch postgres on the command line, enter `psql`
 * Create a database called `ttt_experiment` by entering
 ```
 CREATE DATABASE ttt_experiment
