@@ -34,12 +34,6 @@
         p1-board (string/replace specific-board (re-pattern p1-marker) (generic-marker player1))]
     (string/replace p1-board (re-pattern p2-marker) (generic-marker player2))))
 
-; to create a table called game
-(def game-sql (jdbc/create-table-ddl :game [[:state "VARCHAR(16) NOT NULL"]
-                                          [:turn "VARCHAR(1) NOT NULL"]
-                                          [:moves "integer[]"]
-                                          ["PRIMARY KEY" "(state, turn)"]]))
-
 (defn- upsert [board-state turn move]
   (let [quoted-turn (str "'" turn "', ")
         quoted-board (str "'" board-state "', ")
@@ -53,5 +47,8 @@
         turn (generic-marker player1)]
       (upsert board-state turn move)))
 
-; (def count-moves
-;   (jdbc/query db ["select state, move, count(*) as count from game, unnest(game.moves) as move group by 1,2 order by 1,3 desc"]))
+(defn update-db-if-up [board player1 player2 move]
+  (try
+    (update-db board player1 player2 move)
+    (catch org.postgresql.util.PSQLException _
+      (prn "db down!!"))))
