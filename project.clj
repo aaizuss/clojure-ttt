@@ -9,7 +9,7 @@
                  [org.clojure/data.json "0.2.6"]
                  [ragtime "0.7.1"]]
   :aliases {"migrate"  ["run" "-m" "clojure-ttt.game-db/migrate"]
-            "rollback" ["run" "-m" "user/rollback"]}
+            "rollback" ["run" "-m" "clojure-ttt.game-db/rollback"]}
   :main ^:skip-aot clojure-ttt.main
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
