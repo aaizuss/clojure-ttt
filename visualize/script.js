@@ -1,3 +1,21 @@
+document.querySelector('#search').addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  var board_state = document.getElementById('board_state').value
+  var request = new XMLHttpRequest();
+
+  request.open("POST", "http://localhost:8000/query.php");
+  request.setRequestHeader('Content-Type', 'application/json');
+
+  request.onloadend = function(e) {
+    document.getElementById('chart').innerHTML = "";
+    render(null, JSON.parse(request.responseText));
+  }
+
+  request.send(JSON.stringify({
+    "board_state": board_state
+  }));
+});
 
 var margin = {top: 20, right: 20, bottom: 70, left: 70},
     width = 700 - margin.left - margin.right,
@@ -9,15 +27,16 @@ var x = d3.scaleBand()
           .padding(0.1);
 var y = d3.scaleLinear().range([height, 0]);
 
-// add the SVG element
-var svg = d3.select("#chart").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")")
 
-d3.json("/dbconnect.php", function(error, data) {
+function render(error, data) {
+  // add the SVG element
+  var svg = d3.select("#chart").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")")
+
   if(error) throw error;
   console.log(data);
 
@@ -35,7 +54,10 @@ d3.json("/dbconnect.php", function(error, data) {
 
   svg.append("g")
       .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x).ticks());
+      .call(d3.axisBottom(x));
+
+  svg.selectAll("g")
+  .exit().remove();
 
   // text label for the x axis
   svg.append("text")
@@ -65,7 +87,7 @@ d3.json("/dbconnect.php", function(error, data) {
       .text("Frequency");
 
   svg.selectAll("bar")
-    .data(data)
+  .data(data)
   .enter().append("rect")
     .attr("class", "bar")
     .attr("x", function(d) { return x(d.move); })
@@ -73,4 +95,4 @@ d3.json("/dbconnect.php", function(error, data) {
     .attr("y", function(d) { return y(d.count); })
     .attr("height", function(d) { return height - y(d.count); });
 
-});
+};

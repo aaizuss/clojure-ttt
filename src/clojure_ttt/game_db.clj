@@ -1,7 +1,6 @@
 (ns clojure-ttt.game-db
   (:require [clojure.java.jdbc :as jdbc]
             [clojure-ttt.player :as player]
-            [clojure-ttt.board :as board]
             [clojure.string :as string]
             [ragtime.jdbc :as ragtime]
             [ragtime.repl :as repl]))
@@ -27,11 +26,10 @@
 (defn generic-marker [player]
   (if (player/goes-first? player) "x" "o"))
 
-(defn board-state [board player1 player2]
-  (let [specific-board (board/flat-string board)
-        p1-marker (player/get-marker player1)
+(defn board-state [board-string player1 player2]
+  (let [p1-marker (player/get-marker player1)
         p2-marker (player/get-marker player2)
-        p1-board (string/replace specific-board (re-pattern p1-marker) (generic-marker player1))]
+        p1-board (string/replace board-string (re-pattern p1-marker) (generic-marker player1))]
     (string/replace p1-board (re-pattern p2-marker) (generic-marker player2))))
 
 (defn- upsert [board-state turn move]

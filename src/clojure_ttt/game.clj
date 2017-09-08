@@ -72,8 +72,8 @@
 
 (defn update-db-if-up [board player1 player2 move connected]
   (if connected
-      (game-db/update-db board player1 player2 move)
-      nil))
+    (game-db/update-db (board/flat-string board) player1 player2 move)
+    nil))
 
 (defn get-player-move [current-player opponent board move-history]
   (let [player-markers (player-markers current-player opponent)

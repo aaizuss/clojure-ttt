@@ -13,9 +13,9 @@
 
 (deftest board-state-test
   (testing "p1 is A and p2 is B"
-    (is (= "xxoo_xo_x" (board-state marked-board player1 player2)))))
+    (is (= "xxoo_xo_x" (board-state "AABB_AB_A" player1 player2)))))
 
-; commented out because stack trace prints 
-; (deftest connected-test
-;   (testing "false when db not running"
-;     (is (= false (connected?)))))
+; commented out because stack trace prints
+(deftest connected-test
+  (testing "false when db not running"
+    (is (= false (connected?)))))
