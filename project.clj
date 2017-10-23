@@ -4,7 +4,12 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/data.json "0.2.6"]]
+                 [org.clojure/java.jdbc "0.7.1"]
+                 [org.postgresql/postgresql "42.1.4"]
+                 [org.clojure/data.json "0.2.6"]
+                 [ragtime "0.7.1"]]
+  :aliases {"migrate"  ["run" "-m" "clojure-ttt.game-db/migrate"]
+            "rollback" ["run" "-m" "clojure-ttt.game-db/rollback"]}
   :main ^:skip-aot clojure-ttt.main
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
